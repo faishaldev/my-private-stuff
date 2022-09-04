@@ -1,0 +1,16 @@
+{
+    "name": "musshal/my-private-stuff",
+    "description": "An information system to manage my private stuff",
+    "autoload": {
+        "psr-4": {
+            "Musshal\\MyPrivateStuff\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Musthafa Faishal",
+            "email": "musthafafaishal@gmail.com"
+        }
+    ],
+    "require": {}
+}
