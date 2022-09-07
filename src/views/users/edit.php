@@ -28,7 +28,7 @@
   <div>
     <input type="password" name="password" id="password" placeholder="Password" value="<?= $data['user']['password']; ?>">
   </div>
-  <button type="submit">Save</button>
+  <button type="submit" onclick="return confirm('Are you sure?')">Save</button>
 </form>
 
 <a href="<?= BASEURL; ?>/users">Back</a>

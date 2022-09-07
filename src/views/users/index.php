@@ -9,7 +9,7 @@
   </ul>
 </nav>
 <a href="<?= BASEURL; ?>/users/add">Add User</a>
-<h1>Daftar User</h1>
+<h1>Users List</h1>
 <table>
   <tr>
     <th>No</th>
@@ -72,10 +72,16 @@
             <form action="<?= BASEURL; ?>/users/recovery/<?= $user['id']; ?>" method="POST">
               <button type="submit" onclick="return confirm('Are you sure?')">Recovery</button>
             </form>
+            <form action="<?= BASEURL; ?>/users/edit/<?= $user['id']; ?>" method="POST">
+              <button type="submit">Edit</button>
+            </form>
           <?php
           } else { ?>
             <form action="<?= BASEURL; ?>/users/activate/<?= $user['id']; ?>" method="POST">
               <button type="submit" onclick="return confirm('Are you sure?')">Activate</button>
+            </form>
+            <form action="<?= BASEURL; ?>/users/edit/<?= $user['id']; ?>" method="POST">
+              <button type="submit">Edit</button>
             </form>
             <form form action="<?= BASEURL; ?>/users/delete/<?= $user['id']; ?>" method="POST">
               <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
