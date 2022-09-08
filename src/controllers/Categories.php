@@ -48,7 +48,7 @@ class Categories extends Controller {
   }
 
   public function delete($id) {
-    if ($this->model('CategoriesModel')->deleteUser($id) > 0) {
+    if ($this->model('CategoriesModel')->deleteCategory($id) > 0) {
       header('Location: ' . BASEURL . '/categories');
       exit;
     }

@@ -57,11 +57,18 @@ class CategoriesModel {
     return $this->db->rowCount();
   }
 
-  public function deleteUser($id) {
+  public function deleteCategory($id) {
     $this->db->query('DELETE FROM categories WHERE id = :id');
     $this->db->bind('id', $id);
     $this->db->execute();
 
     return $this->db->rowCount();
+  }
+
+  public function getCategoryAmount() {
+    $this->db->query('SELECT COUNT(*) FROM categories');
+    $this->db->execute();
+
+    return $this->db->row();
   }
 }

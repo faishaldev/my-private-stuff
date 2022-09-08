@@ -29,5 +29,4 @@
   </div>
   <button type="submit">Add</button>
 </form>
-
 <a href="<?= BASEURL; ?>/users">Back</a>

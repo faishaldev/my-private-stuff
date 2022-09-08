@@ -10,10 +10,10 @@
 </nav>
 <form action="<?= BASEURL; ?>/categories/create" method="POST">
   <div>
-    <input type="text" name="name" id="name" placeholder="Stuff name">
+    <input type="text" name="name" id="name" placeholder="Category name">
   </div>
   <div>
-    <input type="text" name="description" id="description" placeholder="Stuff description">
+    <input type="text" name="description" id="description" placeholder="Category description">
   </div>
   <button type="submit">Add</button>
 </form>

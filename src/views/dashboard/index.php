@@ -1,5 +1,5 @@
 <nav>
-  <h1>Home</h1>
+  <h1>Dashboard</h1>
   <ul>
     <li><a href="<?= BASEURL; ?>">Home</a></li>
     <li><a href="<?= BASEURL; ?>/dashboard">Dashboard</a></li>
@@ -9,9 +9,5 @@
     <li><a href="<?= BASEURL; ?>/about">About</a></li>
   </ul>
 </nav>
-<header>
-  <h1>My Private Stuff</h1>
-  <h2>A Stuff Manager for You</h2>
-  <h3>It will makes you easy to manage your private stuff</h3>
-  <h4>You can also borrow stuff to other user with an owner permission</h4>
-</header>
+<h1>Categories: <?= $data['amount_category']; ?></h1>
+<h1>Stuff: <?= $data['amount_stuff']; ?></h1>
