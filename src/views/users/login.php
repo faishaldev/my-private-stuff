@@ -1,7 +1,7 @@
 <h1>Login</h1>
-<form action="">
+<form action="<?= BASEURL; ?>/users/signin" method="POST">
   <div>
-    <input type="text" name="username" id="username" placeholder="Username/Email">
+    <input type="text" name="user" id="user" placeholder="Username/Email">
   </div>
   <div>
     <input type="password" name="password" id="password" placeholder="Password">

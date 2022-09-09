@@ -23,9 +23,26 @@ class Users extends Controller {
   }
 
   public function create() {
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    if ($this->isUserAvailable($username, $email)) {
+      header('Location: ' . BASEURL . '/users');
+      exit;
+    }
+
     if ($this->model('UsersModel')->addUser($_POST) > 0) {
       header('Location: ' . BASEURL . '/users');
       exit;
+    }
+  }
+
+  public function isUserAvailable($username, $email) {
+    if ($this->model('UsersModel')->checkUserAvailability($username, $email) > 0) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -83,6 +100,33 @@ class Users extends Controller {
     $this->view('templates/header', $data);
     $this->view('users/login');
     $this->view('templates/footer');
+  }
+
+  public function signin() {
+    $user = $_POST['user'];
+    $password = $_POST['password'];
+    
+    $data = [
+      'login' => $this->model('UsersModel')->loginUser($user, $password)
+    ];
+
+    session_start();
+
+    if ($data['login'] == NULL) {
+      header('Location: ' . BASEURL . '/users/login');
+    } else {
+      foreach ($data['login'] as $row) :
+        $_SESSION['username'] = $row['username'];
+        header('Location: ' . BASEURL);
+      endforeach;
+    }
+  }
+
+  public function logout() {
+    session_start();
+    unset($_SESSION['username']);
+    session_destroy();
+    header('Location: ' . BASEURL . '');
   }
 
   public function register() {

@@ -101,4 +101,20 @@ class UsersModel {
 
     return $this->db->rowCount();
   }
+
+  public function checkUserAvailability($username, $email) {
+    $this->db->query('SELECT COUNT(*) FROM users WHERE username = :username OR email = :email');
+    $this->db->bind('username', $username);
+    $this->db->bind('email', $email);
+
+    return $this->db->row();
+  }
+
+  public function loginUser($user, $password) {
+    $this->db->query('SELECT * FROM users WHERE username = :user OR email = :user AND password = :password');
+    $this->db->bind('user', $user);
+    $this->db->bind('password', $password);
+
+    return $this->db->resultSet();
+  }
 }

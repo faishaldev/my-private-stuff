@@ -1,3 +1,12 @@
+<?php
+if (!isset($_SESSION)) {
+  session_start();
+}
+
+$name = $_SESSION['username'];
+?>
+
+<h1>Hi <?= $name; ?></h1>
 <nav>
   <h1>Category</h1>
   <ul>
@@ -9,7 +18,12 @@
     <li><a href="<?= BASEURL; ?>/about">About</a></li>
   </ul>
 </nav>
+<div>
+  <a href="<?= BASEURL; ?>/users/logout">Logout</a>
+</div>
+<div>
 <a href="<?= BASEURL; ?>/categories/add">Add Category</a>
+</div>
 <h1>Categories List</h1>
 <table>
   <tr>
