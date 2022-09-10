@@ -3,10 +3,10 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-$name = $_SESSION['username'];
+$username = $_SESSION['username'];
 ?>
 
-<h1>Hi <?= $name; ?></h1>
+<h1>Hi <?= $username; ?></h1>
 <nav>
   <h1>Stuff</h1>
   <ul>
@@ -14,7 +14,7 @@ $name = $_SESSION['username'];
     <li><a href="<?= BASEURL; ?>/dashboard">Dashboard</a></li>
     <li><a href="<?= BASEURL; ?>/categories">Category</a></li>
     <li><a href="<?= BASEURL; ?>/stuffs">Stuff</a></li>
-    <li><a href="<?= BASEURL; ?>/users">User</a></li>
+    <?= $data['role'] === 'Admin' ? '<li><a href="' . BASEURL . '/users">User</a></li>' : ''; ?>
     <li><a href="<?= BASEURL; ?>/about">About</a></li>
   </ul>
 </nav>
@@ -31,7 +31,7 @@ $name = $_SESSION['username'];
     <th>Name</th>
     <th>Description</th>
     <th>Category</th>
-    <th>Owner</th>
+    <?= $data['role'] === 'Admin' ? '<th>Owner</th>' : '' ; ?>
     <th>Action</th>
   </tr>
   <?php $no = 1 ?>
@@ -41,7 +41,7 @@ $name = $_SESSION['username'];
     <td><?= $stuff['name']; ?></td>
     <td><?= $stuff['description']; ?></td>
     <td><?= $stuff['category_name']; ?></td>
-    <td><?= $stuff['user_username']; ?></td>
+    <?= $data['role'] === 'Admin' ? '<td>' . $stuff['user_username'] . '</td>': ''; ?>
     <td>
       <form action="<?= BASEURL; ?>/stuffs/edit/<?= $stuff['id']; ?>" method="POST">
         <button type="submit">Edit</button>

@@ -8,7 +8,7 @@ class CategoriesModel {
   }
   
   public function getCategories() {
-    $this->db->query('SELECT * FROM categories ORDER BY created_at DESC');
+    $this->db->query('SELECT categories.*, users.username FROM categories JOIN users ON categories.user_id = users.id ORDER BY categories.created_at DESC');
 
     return $this->db->resultSet();
   }
@@ -16,7 +16,11 @@ class CategoriesModel {
   public function addCategory($data) {
     $id = uniqid('category-');
 
-    TODO: // get category owner
+    // get category owner
+    $this->db->query('SELECT id FROM users WHERE username = :username');
+    $this->db->bind('username', $data['username']);
+
+    $userId = $this->db->row();
 
     $createdAt = date('c');
     $updatedAt = $createdAt;
@@ -25,7 +29,7 @@ class CategoriesModel {
 
     $this->db->query($query);
     $this->db->bind('id', $id);
-    $this->db->bind('user_id', 'user-234');
+    $this->db->bind('user_id', $userId);
     $this->db->bind('name', $data['name']);
     $this->db->bind('description', $data['description']);
     $this->db->bind('created_at', $createdAt);
@@ -67,8 +71,21 @@ class CategoriesModel {
 
   public function getCategoryAmount() {
     $this->db->query('SELECT COUNT(*) FROM categories');
-    $this->db->execute();
 
     return $this->db->row();
+  }
+
+  public function getCategoryAmountByUsername($username) {
+    $this->db->query('SELECT COUNT(*) FROM categories JOIN users ON categories.user_id = users.id WHERE users.username = :username');
+    $this->db->bind('username', $username);
+
+    return $this->db->row();
+  }
+
+  public function getCategoriesByUsername($username) {
+    $this->db->query('SELECT categories.*, users.username FROM categories JOIN users ON categories.user_id = users.id WHERE users.username = :username ORDER BY categories.created_at DESC');
+    $this->db->bind('username', $username);
+
+    return $this->db->resultSet();
   }
 }

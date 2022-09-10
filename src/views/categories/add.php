@@ -1,3 +1,10 @@
+<?php
+if (!isset($_SESSION)) {
+  session_start();
+}
+
+$username = $_SESSION['username'];
+?>
 <nav>
   <h1>Add Category</h1>
   <ul>
@@ -9,6 +16,7 @@
   </ul>
 </nav>
 <form action="<?= BASEURL; ?>/categories/create" method="POST">
+  <input type="hidden" name="username" id="username" value="<?= $username; ?>">
   <div>
     <input type="text" name="name" id="name" placeholder="Category name">
   </div>

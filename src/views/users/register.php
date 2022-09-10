@@ -20,4 +20,4 @@
   </div>
   <button>Register</button>
 </form>
-<a href="<?= BASEURL; ?>/users/login">Login</a>
+<a href="?login=true">Login</a>

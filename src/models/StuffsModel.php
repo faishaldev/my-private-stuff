@@ -16,7 +16,11 @@ class StuffsModel {
   public function addStuff($data) {
     $id = uniqid('stuff-');
 
-    TODO: // get stuff owner
+    // get stuff owner
+    $this->db->query('SELECT id FROM users WHERE username = :username');
+    $this->db->bind('username', $data['username']);
+    
+    $userId = $this->db->row();
 
     $createdAt = date('c');
     $updatedAt = $createdAt;
@@ -26,7 +30,7 @@ class StuffsModel {
     $this->db->query($query);
     $this->db->bind('id', $id);
     $this->db->bind('category_id', $data['category']);
-    $this->db->bind('user_id', 'user-345');
+    $this->db->bind('user_id', $userId);
     $this->db->bind('name', $data['name']);
     $this->db->bind('description', $data['description']);
     $this->db->bind('created_at', $createdAt);
@@ -69,8 +73,21 @@ class StuffsModel {
   
   public function getStuffAmount() {
     $this->db->query('SELECT COUNT(*) FROM stuffs');
-    $this->db->execute();
 
     return $this->db->row();
+  }
+
+  public function getStuffAmountByUsername($username) {
+    $this->db->query('SELECT COUNT(*) FROM stuffs JOIN users ON stuffs.user_id = users.id WHERE users.username = :username');
+    $this->db->bind('username', $username);
+
+    return $this->db->row();
+  }
+
+  public function getStuffsByUsername($username) {
+    $this->db->query('SELECT stuffs.*, categories.name as category_name, users.username as user_username FROM stuffs JOIN users ON stuffs.user_id = users.id JOIN categories ON stuffs.category_id = categories.id WHERE users.username = :username ORDER BY stuffs.created_at DESC');
+    $this->db->bind('username', $username);
+
+    return $this->db->resultSet();
   }
 }

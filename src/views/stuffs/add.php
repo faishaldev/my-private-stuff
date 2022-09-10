@@ -1,3 +1,11 @@
+<?php
+if (!isset($_SESSION)) {
+  session_start();
+}
+
+$username = $_SESSION['username'];
+?>
+
 <nav>
   <h1>Add Stuff</h1>
   <ul>
@@ -9,6 +17,7 @@
   </ul>
 </nav>
 <form action="<?= BASEURL; ?>/stuffs/create" method="POST">
+  <input type="hidden" name="username" id="username" value="<?= $username; ?>">
   <div>
     <input type="text" name="name" id="name" placeholder="Stuff name">
   </div>

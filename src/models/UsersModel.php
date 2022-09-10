@@ -8,7 +8,7 @@ class UsersModel {
   }
 
   public function getUsers() {
-    $this->db->query("SELECT users.* FROM users JOIN roles ON users.role_id = roles.id WHERE roles.name = 'User' ORDER BY created_at DESC");
+    $this->db->query("SELECT users.* FROM users JOIN roles ON users.role_id = roles.id ORDER BY created_at DESC");
 
     return $this->db->resultSet();
   }
@@ -17,9 +17,7 @@ class UsersModel {
     $id = uniqid('user-');
 
     // get user role
-    $query = "SELECT id FROM roles WHERE name = 'User'";
-
-    $this->db->query($query);
+    $this->db->query("SELECT id FROM roles WHERE name = 'User'");
 
     $roleId = $this->db->row();
 
@@ -110,11 +108,25 @@ class UsersModel {
     return $this->db->row();
   }
 
+  public function getPasswordByUsernameOrEmail($user) {
+    $this->db->query('SELECT password FROM users WHERE username = :user OR email = :user');
+    $this->db->bind('user', $user);
+
+    return $this->db->row();
+  }
+
   public function loginUser($user, $password) {
-    $this->db->query('SELECT * FROM users WHERE username = :user OR email = :user AND password = :password');
+    $this->db->query('SELECT * FROM users WHERE (username = :user OR email = :user) AND password = :password');
     $this->db->bind('user', $user);
     $this->db->bind('password', $password);
 
     return $this->db->resultSet();
+  }
+
+  public function getRoleNameByUsername($username) {
+    $this->db->query('SELECT name FROM roles JOIN users ON roles.id = users.role_id WHERE users.username = :username');
+    $this->db->bind('username', $username);
+
+    return $this->db->row();
   }
 }

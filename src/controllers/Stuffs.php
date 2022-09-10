@@ -2,14 +2,34 @@
 
 class Stuffs extends Controller {
   public function index() {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    $username = $_SESSION['username'];
+    
     $data = [
       'title' => 'Stuffs',
-      'stuffs' => $this->model('StuffsModel')->getStuffs()
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($username),
     ];
 
-    $this->view('templates/header', $data);
-    $this->view('stuffs/index', $data);
-    $this->view('templates/footer');
+    if ($data['role'] === 'Admin') {
+      $data += ['stuffs' => $this->model('StuffsModel')->getStuffs()];
+
+      $this->view('templates/header', $data);
+      $this->view('stuffs/index', $data);
+      $this->view('templates/footer');
+      exit;
+    }
+    
+    if ($data['role'] === 'User') {
+      $data += ['stuffs' => $this->model('StuffsModel')->getStuffsByUsername($username)];
+
+      $this->view('templates/header', $data);
+      $this->view('stuffs/index', $data);
+      $this->view('templates/footer');
+      exit;
+    }
   }
 
   public function add() {

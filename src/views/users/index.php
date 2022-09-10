@@ -3,10 +3,10 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-$name = $_SESSION['username'];
+$username = $_SESSION['username'];
 ?>
 
-<h1>Hi <?= $name; ?></h1>
+<h1>Hi <?= $username; ?></h1>
 <nav>
   <h1>User</h1>
   <ul>

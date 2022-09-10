@@ -8,6 +8,12 @@ class Controller {
 
     if (isset($_SESSION['username'])) {
       require_once '../src/views/' . $view . '.php';
+    } else if (isset($_GET['reset'])) {
+      require_once '../src/views/users/reset.php';
+    } else if (isset($_GET['register'])) {
+      require_once '../src/views/users/register.php';
+    } else if (isset($_GET['login'])) {
+      require_once '../src/views/users/login.php';
     } else {
       require_once '../src/views/users/login.php';
     }
