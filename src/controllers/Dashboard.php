@@ -2,6 +2,11 @@
 
 class Dashboard extends Controller {
   public function index() {
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
     $username = $_SESSION['username'];
 
     $data = [

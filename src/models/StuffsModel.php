@@ -90,4 +90,11 @@ class StuffsModel {
 
     return $this->db->resultSet();
   }
+
+  public function getStuffAmountByCategoryId($categoryId) {
+    $this->db->query('SELECT COUNT(*) FROM stuffs WHERE category_id = :category_id');
+    $this->db->bind('category_id', $categoryId);
+
+    return $this->db->row();
+  }
 }

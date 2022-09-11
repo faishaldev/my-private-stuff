@@ -52,6 +52,7 @@ class Stuffs extends Controller {
 
   public function create() {
     if ($this->model('StuffsModel')->addStuff($_POST) > 0) {
+      Flasher::setFlash('New stuff has been added!');
       header('Location: ' . BASEURL . '/stuffs');
       exit;
     }
@@ -78,6 +79,7 @@ class Stuffs extends Controller {
 
   public function update() {
     if ($this->model('StuffsModel')->editUser($_POST) > 0) {
+      Flasher::setFlash('Stuff has been updated!');
       header('Location: ' . BASEURL . '/stuffs');
       exit;
     }
@@ -85,6 +87,7 @@ class Stuffs extends Controller {
 
   public function delete($id) {
     if ($this->model('StuffsModel')->deleteStuff($id) > 0) {
+      Flasher::setFlash('Stuff has been deleted!');
       header('Location: '. BASEURL . '/stuffs');
       exit;
     }

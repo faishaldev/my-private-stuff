@@ -9,7 +9,7 @@
     <input type="text" name="description" id="description" placeholder="Stuff description">
   </div>
   <div>
-    <select name="category" id="category">
+    <select name="category" id="category" required>
       <option value="">-- Choose category --</option>
       <?php foreach ($data['categories'] as $category) : ?>
       <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>

@@ -53,7 +53,7 @@ class Categories extends Controller {
     $userId = $this->model('UsersModel')->getUserIdByUsername($_POST['username']);
 
     if ($this->model('CategoriesModel')->addCategory($_POST, $userId) > 0) {
-      Flasher::setFlash('New category has been created!');
+      Flasher::setFlash('New category has been added!');
       header('Location: ' . BASEURL . '/categories');
       exit;
     }
@@ -86,6 +86,12 @@ class Categories extends Controller {
   }
 
   public function delete($id) {
+    if ($this->model('StuffsModel')->getStuffAmountByCategoryId($id) > 0) {
+      Flasher::setFlash('Cannot delete, there are stuff with this category!');
+      header('Location: ' . BASEURL . '/categories');
+      exit;
+    }
+
     if ($this->model('CategoriesModel')->deleteCategory($id) > 0) {
       Flasher::setFlash('Category has been deleted!');
       header('Location: ' . BASEURL . '/categories');
