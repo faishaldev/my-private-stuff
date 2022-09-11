@@ -33,26 +33,43 @@ class Categories extends Controller {
   }
 
   public function add() {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    $username = $_SESSION['username'];
+
     $data = [
-      'title' => 'Add Category'
+      'title' => 'Add Category',
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
     ];
 
     $this->view('templates/header', $data);
-    $this->view('categories/add');
+    $this->view('categories/add', $data);
     $this->view('templates/footer');
   }
 
   public function create() {
-    if ($this->model('CategoriesModel')->addCategory($_POST) > 0) {
+    $userId = $this->model('UsersModel')->getUserIdByUsername($_POST['username']);
+
+    if ($this->model('CategoriesModel')->addCategory($_POST, $userId) > 0) {
+      Flasher::setFlash('New category has been created!');
       header('Location: ' . BASEURL . '/categories');
       exit;
     }
   }
 
   public function edit($id) {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    $username = $_SESSION['username'];
+
     $data = [
       'title' => 'Edit Category',
-      'category' => $this->model('CategoriesModel')->getCategoryById($id)
+      'category' => $this->model('CategoriesModel')->getCategoryById($id),
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
     ];
 
     $this->view('templates/header', $data);
@@ -62,6 +79,7 @@ class Categories extends Controller {
 
   public function update() {
     if($this->model('CategoriesModel')->editUser($_POST) > 0) {
+      Flasher::setFlash('Category has been updated!');
       header('Location: ' . BASEURL . '/categories');
       exit;
     }
@@ -69,6 +87,7 @@ class Categories extends Controller {
 
   public function delete($id) {
     if ($this->model('CategoriesModel')->deleteCategory($id) > 0) {
+      Flasher::setFlash('Category has been deleted!');
       header('Location: ' . BASEURL . '/categories');
       exit;
     }

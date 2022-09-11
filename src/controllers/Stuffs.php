@@ -10,7 +10,7 @@ class Stuffs extends Controller {
     
     $data = [
       'title' => 'Stuffs',
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username),
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
     ];
 
     if ($data['role'] === 'Admin') {
@@ -33,9 +33,16 @@ class Stuffs extends Controller {
   }
 
   public function add() {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    $username = $_SESSION['username'];
+
     $data = [
       'title' => 'Add Stuff',
-      'categories' => $this->model('CategoriesModel')->getCategories()
+      'categories' => $this->model('CategoriesModel')->getCategories(),
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
     ];
 
     $this->view('templates/header', $data);
@@ -51,10 +58,17 @@ class Stuffs extends Controller {
   }
 
   public function edit($id) {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    $username = $_SESSION['username'];
+
     $data = [
       'title' => 'Edit Stuff',
       'stuff' => $this->model('StuffsModel')->getStuffById($id),
-      'categories' => $this->model('CategoriesModel')->getCategories()
+      'categories' => $this->model('CategoriesModel')->getCategories(),
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
     ];
 
     $this->view('templates/header', $data);

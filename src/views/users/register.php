@@ -1,4 +1,9 @@
 <h1>Register</h1>
+<nav>
+  <ul>
+    <li><a href="<?= BASEURL; ?>">Home</a></li>
+  </ul>
+</nav>
 <form action="<?= BASEURL; ?>/users/create" method="POST">
   <div>
     <input type="text" name="username" id="username" placeholder="Username">

@@ -1,8 +1,6 @@
 <?php
 
 class CategoriesModel {
-  private $dbh;
-
   public function __construct() {
     $this->db = new Database;
   }
@@ -13,15 +11,8 @@ class CategoriesModel {
     return $this->db->resultSet();
   }
 
-  public function addCategory($data) {
+  public function addCategory($data, $userId) {
     $id = uniqid('category-');
-
-    // get category owner
-    $this->db->query('SELECT id FROM users WHERE username = :username');
-    $this->db->bind('username', $data['username']);
-
-    $userId = $this->db->row();
-
     $createdAt = date('c');
     $updatedAt = $createdAt;
 

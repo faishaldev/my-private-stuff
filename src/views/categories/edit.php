@@ -1,13 +1,5 @@
-<nav>
-  <h1>Edit Category</h1>
-  <ul>
-    <li><a href="<?= BASEURL; ?>">Home</a></li>
-    <li><a href="<?= BASEURL; ?>/categories">Category</a></li>
-    <li><a href="<?= BASEURL; ?>/stuffs">Stuff</a></li>
-    <li><a href="<?= BASEURL; ?>/about">About</a></li>
-    <li><a href="<?= BASEURL; ?>/users">User</a></li>
-  </ul>
-</nav>
+<?php include_once __DIR__ . '/../layouts/navbar.php' ?>
+
 <form action="<?= BASEURL; ?>/categories/update" method="POST">
   <input type="hidden" name="id" id="id" value="<?= $data['category']['id']; ?>">
   <div>

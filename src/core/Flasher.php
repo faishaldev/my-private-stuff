@@ -12,7 +12,6 @@ class Flasher {
       echo '<p>' . $_SESSION['flash']['msg'] . '</p>';
 
       unset($_SESSION['flash']);
-      session_destroy();
     }
   }
 }

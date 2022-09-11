@@ -12,9 +12,10 @@ class Users extends Controller {
     }
     
     $username = $_SESSION['username'];
-    $role = $this->model('UsersModel')->getRoleNameByUsername($username);
 
-    if ($role === 'Admin') {
+    $data += ['role' => $this->model('UsersModel')->getRoleNameByUsername($username)];
+
+    if ($data['role'] === 'Admin') {
       $this->view('templates/header', $data);
       $this->view('users/index', $data);
       $this->view('templates/footer');
@@ -45,6 +46,10 @@ class Users extends Controller {
     }
 
     if ($this->model('UsersModel')->addUser($_POST) > 0) {
+      if (!$_SESSION['username']) {
+        Flasher::setFlash('Akun berhasil dibuat!');
+      }
+
       header('Location: ' . BASEURL . '/users');
       exit;
     }
@@ -73,8 +78,15 @@ class Users extends Controller {
   }
 
   public function edit($id) {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+    
+    $username = $_SESSION['username'];
+
     $data = [
       'title' => 'Edit User',
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($username),
       'user' => $this->model('UsersModel')->getUserById($id)
     ];
 
@@ -157,7 +169,7 @@ class Users extends Controller {
         endforeach;
       } else {
         Flasher::setFlash('Password salah!');
-        header('Location: ' . BASEURL);
+        header('Location: ' . BASEURL . '/?login=true');
         exit;
       }
     } else {
@@ -187,8 +199,21 @@ class Users extends Controller {
     $this->view('templtes/footer');
   }
 
-  public function password() {
-    
+  public function change() {
+    $email = $_POST['email'];
+    $_POST['new_password'] = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
+
+    if ($this->model('UsersModel')->getUserByEmail($email) > 0) {
+      if ($this->model('UsersModel')->changePassword($_POST) > 0) {
+        Flasher::setFlash('Password berhasil diubah!');
+        header('Location: ' . BASEURL . '/?login=true');
+        exit;
+      }
+    } else {
+      Flasher::setFlash('Email tidak ditemukan!');
+      header('Location: ' . BASEURL . '/?reset=true');
+      exit;
+    }
   }
 
   public function register() {

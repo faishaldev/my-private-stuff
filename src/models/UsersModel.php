@@ -65,6 +65,13 @@ class UsersModel {
     return $this->db->single();
   }
 
+  public function getUserIdByUsername($username) {
+    $this->db->query('SELECT id FROM users WHERE username = :username');
+    $this->db->bind('username', $username);
+
+    return $this->db->row();
+  }
+
   public function editUser($data) {
     $updatedAt = date('c');
 
@@ -128,5 +135,24 @@ class UsersModel {
     $this->db->bind('username', $username);
 
     return $this->db->row();
+  }
+
+  public function getUserByEmail($email) {
+    $this->db->query('SELECT COUNT(*) FROM users WHERE email = :email');
+    $this->db->bind('email', $email);
+    
+    return $this->db->row();
+  }
+
+  public function changePassword($data) {
+    $updatedAt = date('c');
+
+    $this->db->query('UPDATE users SET password = :password, updated_at = :updated_at WHERE email = :email');
+    $this->db->bind('password', $data['new_password']);
+    $this->db->bind('updated_at', $updatedAt);
+    $this->db->bind('email', $data['email']);
+    $this->db->execute();
+
+    return $this->db->rowCount();
   }
 }

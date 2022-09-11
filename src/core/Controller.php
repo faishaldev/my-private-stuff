@@ -15,7 +15,7 @@ class Controller {
     } else if (isset($_GET['login'])) {
       require_once '../src/views/users/login.php';
     } else {
-      require_once '../src/views/users/login.php';
+      require_once '../src/views/home/index.php';
     }
   }
 
