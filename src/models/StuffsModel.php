@@ -1,8 +1,6 @@
 <?php
 
 class StuffsModel {
-  private $dbh;
-
   public function __construct() {
     $this->db = new Database;
   }
@@ -15,13 +13,7 @@ class StuffsModel {
 
   public function addStuff($data) {
     $id = uniqid('stuff-');
-
-    // get stuff owner
-    $this->db->query('SELECT id FROM users WHERE username = :username');
-    $this->db->bind('username', $data['username']);
-    
-    $userId = $this->db->row();
-
+    $userId = $this->getStuffOwnerByUsername($data['username']);
     $createdAt = date('c');
     $updatedAt = $createdAt;
 
@@ -40,6 +32,13 @@ class StuffsModel {
     return $this->db->rowCount();
   }
 
+  public function getStuffOwnerByUsername($username) {
+    $this->db->query('SELECT id FROM users WHERE username = :username');
+    $this->db->bind('username', $username);
+
+    return $this->db->row();
+  }
+
   public function getStuffById($id) {
     $this->db->query('SELECT stuffs.*, categories.name as category_name, users.username as user_username FROM stuffs JOIN categories ON stuffs.category_id = categories.id JOIN users ON stuffs.user_id = users.id WHERE stuffs.id = :id');
     $this->db->bind('id', $id);
@@ -47,7 +46,7 @@ class StuffsModel {
     return $this->db->single();
   }
 
-  public function editUser($data) {
+  public function updateStuff($data) {
     $updatedAt = date('c');
 
     $query = "UPDATE stuffs SET category_id = :category_id, name = :name, description = :description, updated_at = :updated_at WHERE id = :id";
@@ -71,13 +70,13 @@ class StuffsModel {
     return $this->db->rowCount();
   }
   
-  public function getStuffAmount() {
+  public function getStuffsAmount() {
     $this->db->query('SELECT COUNT(*) FROM stuffs');
 
     return $this->db->row();
   }
 
-  public function getStuffAmountByUsername($username) {
+  public function getStuffsAmountByUsername($username) {
     $this->db->query('SELECT COUNT(*) FROM stuffs JOIN users ON stuffs.user_id = users.id WHERE users.username = :username');
     $this->db->bind('username', $username);
 
@@ -91,7 +90,7 @@ class StuffsModel {
     return $this->db->resultSet();
   }
 
-  public function getStuffAmountByCategoryId($categoryId) {
+  public function getStuffsAmountByCategoryId($categoryId) {
     $this->db->query('SELECT COUNT(*) FROM stuffs WHERE category_id = :category_id');
     $this->db->bind('category_id', $categoryId);
 

@@ -5,6 +5,7 @@
       <?php if (!isset($_SESSION['username'])) { ?>
         <li><a href="?login=true">Login</a></li>
         <li><a href="?register=true">Register</a></li>
+        <li><a href="?about=true">About</a></li>
       <?php } else { ?>
         <li><a href="<?= BASEURL; ?>/dashboard">Dashboard</a></li>
         <li><a href="<?= BASEURL; ?>/users/logout" onclick="return confirm('Are you sure?')">Logout</a></li>

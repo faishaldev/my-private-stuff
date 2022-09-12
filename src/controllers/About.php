@@ -5,11 +5,15 @@ class About extends Controller {
     if (!isset($_SESSION)) { 
       session_start();
     }
-    $username = $_SESSION['username'];
+    
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
 
     $data = [
       'title' => 'About',
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
 
     $this->view('templates/header', $data);

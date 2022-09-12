@@ -89,3 +89,4 @@
   </tr>
   <?php endforeach; ?>
 </table>
+<div><?php Flasher::flash(); ?></div>

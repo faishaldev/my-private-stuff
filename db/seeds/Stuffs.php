@@ -65,6 +65,7 @@ class Stuffs extends AbstractSeed
         );
 
         $stuffs = $this->table('stuffs');
+        
         $stuffs->insert($data)->save();
     }
 }

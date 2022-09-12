@@ -2,18 +2,20 @@
 
 class Users extends Controller {
   public function index() {
-    $data = [
-      'title' => 'Users',
-      'users' => $this->model('UsersModel')->getUsers()
-    ];
-
     if (!isset($_SESSION)) { 
       session_start();
     }
-    
-    $username = $_SESSION['username'];
 
-    $data += ['role' => $this->model('UsersModel')->getRoleNameByUsername($username)];
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
+    $data = [
+      'title' => 'Users',
+      'users' => $this->model('UsersModel')->getUsers(),
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+    ];
 
     if ($data['role'] === 'Admin') {
       $this->view('templates/header', $data);
@@ -22,48 +24,86 @@ class Users extends Controller {
       exit;
     }
 
-    header('Location: ' . BASEURL);
+    header('Location: ' . BASEURL . '/dashboard');
   }
 
   public function add() {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
     $data = [
-      'title' => 'Add User'
+      'title' => 'Add User',
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
 
+    if ($data['role'] === 'Users') {
+      header('Location: ' . BASEURL . '/dashboard');
+      exit;
+    }
+
     $this->view('templates/header', $data);
-    $this->view('users/add');
+    $this->view('users/add', $data);
     $this->view('templates/footer');
   }
 
   public function create() {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
+    $data = [
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+    ];
+
+    if ($data['role'] === 'User') {
+      header('Location: ' . BASEURL . '/dashboard');
+      exit;
+    }
+
     $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    if ($this->isUserAvailable($username, $email)) {
-      header('Location: ' . BASEURL . '/users');
+    if ($this->model('UsersModel')->getUserAmountByUsernameOrEmail($_POST['username'], $_POST['email']) > 0) {
+      Flasher::setFlash('Username/email has been used');
+      header('Location: ' . BASEURL . '/users/add');
       exit;
     }
 
     if ($this->model('UsersModel')->addUser($_POST) > 0) {
-      if (!$_SESSION['username']) {
-        Flasher::setFlash('Akun berhasil dibuat!');
-      }
-
+      Flasher::setFlash('New user has been created!');
       header('Location: ' . BASEURL . '/users');
       exit;
     }
   }
 
-  public function isUserAvailable($username, $email) {
-    if ($this->model('UsersModel')->checkUserAvailability($username, $email) > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   public function activate($id) {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
+    $data = [
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+    ];
+
+    if ($data['role'] === 'User') {
+      header('Location: ' . BASEURL . '/dashboard');
+    }
+
     if ($this->model('UsersModel')->activateUser($id) > 0) {
       header('Location: ' . BASEURL . '/users');
       exit;
@@ -71,6 +111,23 @@ class Users extends Controller {
   }
 
   public function deactivate($id) {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
+    $data = [
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+    ];
+
+    if ($data['role'] === 'User') {
+      header('Location: ' . BASEURL . '/dashboard');
+    }
+
     if ($this->model('UsersModel')->deactivateUser($id) > 0) {
       header('Location: ' . BASEURL . '/users');
       exit;
@@ -82,11 +139,14 @@ class Users extends Controller {
       session_start();
     }
     
-    $username = $_SESSION['username'];
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
 
     $data = [
       'title' => 'Edit User',
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username),
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username']),
       'user' => $this->model('UsersModel')->getUserById($id)
     ];
 
@@ -96,13 +156,61 @@ class Users extends Controller {
   }
 
   public function update() {
-    if ($this->model('UsersModel')->editUser($_POST) > 0) {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
+    $data = [
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+    ];
+
+    if ($data['role'] === 'User') {
+      header('Location: ' . BASEURL . '/dashboard');
+      exit;
+    }
+
+    if ($this->model('UsersModel')->getUserAmountByUsername($_POST['username']) > 0) {
+      Flasher::setFlash('Username has been used!');
+      header('Location: ' . BASEURL . '/users/edit/' . $_POST['id']);
+      exit;
+    }
+
+    if ($this->model('UsersModel')->getUserAmounByEmail($_POST['email']) > 0) {
+      Flasher::setFlash('Email has been used!');
+      header('Location: ' . BASEURL . '/users/edit/' . $_POST['id']);
+      exit;
+    }
+
+    if ($this->model('UsersModel')->updateUser($_POST) > 0) {
+      Flasher::setFlash('User has been updated!');
       header('Location: ' . BASEURL . '/users');
       exit;
     }
   }
 
   public function delete($id) {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
+    $data = [
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+    ];
+
+    if ($data['role'] === 'User') {
+      header('Location: ' . BASEURL . '/dashboard');
+    }
+
     if ($this->model('UsersModel')->deleteUser($id) > 0) {
       header('Location: ' . BASEURL . '/users');
       exit;
@@ -110,20 +218,38 @@ class Users extends Controller {
   }
 
   public function recovery($id) {
-    if ($this->model('UsersModel')->recoveryUser($id) > 0) {
+    if (!isset($_SESSION)) { 
+      session_start();
+    }
+
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
+    $data = [
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+    ];
+
+    if ($data['role'] === 'User') {
+      header('Location: ' . BASEURL . '/dashboard');
+    }
+
+    if ($this->model('UsersModel')->recoverUser($id) > 0) {
       header('Location: ' . BASEURL . '/users');
       exit;
     }
   }
 
   public function login() {
+    if (isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
     $data = [
       'title' => 'Login'
     ];
-
-    if (isset($_SESSION['username'])) {
-      header('Location: ' . BASEURL);
-    }
 
     $this->view('templates/header', $data);
     $this->view('users/login');
@@ -131,19 +257,16 @@ class Users extends Controller {
   }
 
   public function signin() {
-    $user = $_POST['user'];
-    $password = $_POST['password'];
+    if ($this->model('UsersModel')->getUserByUsernameOrEmailAndPassword($_POST['user'], $_POST['user']) > 0) {
+      $userPasswordHashed = $this->model('UsersModel')->getPasswordByUsernameOrEmail($_POST['user']);
 
-    if ($this->model('UsersModel')->checkUserAvailability($user, $user) > 0) {
-      $userPasswordHashed = $this->model('UsersModel')->getPasswordByUsernameOrEmail($user);
-
-      if (password_verify($password, $userPasswordHashed)) {
-        $login = $this->model('UsersModel')->loginUser($user, $userPasswordHashed);
+      if (password_verify($_POST['password'], $userPasswordHashed)) {
+        $login = $this->model('UsersModel')->getUserByUsernameOrEmailAndPassword($_POST['user'], $userPasswordHashed);
         
         foreach ($login as $row) :
           if ($row['is_active']) {
             if ($row['is_deleted']) {
-              Flasher::setFlash('Akun telah dihapus!');
+              Flasher::setFlash('Account has been deleted!');
               header('Location: ' . BASEURL);
               exit;
             }
@@ -155,12 +278,12 @@ class Users extends Controller {
   
           if (!$row['is_active']) {
             if ($row['is_deleted']) {
-              Flasher::setFlash('Akun telah dihapus!');
+              Flasher::setFlash('Account has been deleted!');
               header('Location: ' . BASEURL);
               exit;
             }
             
-            Flasher::setFlash('Akun belum diaktivasi!');
+            Flasher::setFlash('Account not activated yet!');
             header('Location: ' . BASEURL);
             exit;
           }
@@ -168,12 +291,12 @@ class Users extends Controller {
           header('Location: ' . BASEURL);
         endforeach;
       } else {
-        Flasher::setFlash('Password salah!');
+        Flasher::setFlash('Password is wrong!');
         header('Location: ' . BASEURL . '/?login=true');
         exit;
       }
     } else {
-      Flasher::setFlash('Username/email tidak ditemukan!');
+      Flasher::setFlash('Username/email not found!');
       header('Location: ' . BASEURL);
     }
   }
@@ -192,6 +315,7 @@ class Users extends Controller {
 
     if (isset($_SESSION['username'])) {
       header('Location: ' . BASEURL);
+      exit;
     }
 
     $this->view('templates/header', $data);
@@ -200,17 +324,16 @@ class Users extends Controller {
   }
 
   public function change() {
-    $email = $_POST['email'];
     $_POST['new_password'] = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
 
-    if ($this->model('UsersModel')->getUserByEmail($email) > 0) {
-      if ($this->model('UsersModel')->changePassword($_POST) > 0) {
-        Flasher::setFlash('Password berhasil diubah!');
+    if ($this->model('UsersModel')->getUserAmountByEmail($_POST['email']) > 0) {
+      if ($this->model('UsersModel')->updateUserPassword($_POST) > 0) {
+        Flasher::setFlash('Password has been updated!');
         header('Location: ' . BASEURL . '/?login=true');
         exit;
       }
     } else {
-      Flasher::setFlash('Email tidak ditemukan!');
+      Flasher::setFlash('Email not found!');
       header('Location: ' . BASEURL . '/?reset=true');
       exit;
     }
@@ -223,6 +346,7 @@ class Users extends Controller {
 
     if (isset($_SESSION['username'])) {
       header('Location: ' . BASEURL);
+      exit;
     }
 
     $this->view('templates/header', $data);

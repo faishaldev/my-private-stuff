@@ -15,12 +15,7 @@ class UsersModel {
 
   public function addUser($data) {
     $id = uniqid('user-');
-
-    // get user role
-    $this->db->query("SELECT id FROM roles WHERE name = 'User'");
-
-    $roleId = $this->db->row();
-
+    $roleId = $this->getUserRoleId();
     $createdAt = date('c');
     $updatedAt = $createdAt;
 
@@ -40,6 +35,12 @@ class UsersModel {
     $this->db->execute();
 
     return $this->db->rowCount();
+  }
+
+  public function getUserRoleId() {
+    $this->db->query("SELECT id FROM roles WHERE name = 'User'");
+
+    return $this->db->row();
   }
 
   public function activateUser($id) {
@@ -72,7 +73,7 @@ class UsersModel {
     return $this->db->row();
   }
 
-  public function editUser($data) {
+  public function updateUser($data) {
     $updatedAt = date('c');
 
     $query = "UPDATE users SET username = :username, fullname = :fullname, email = :email, phonenumber = :phonenumber, address = :address, password = :password, updated_at = :updated_at WHERE id = :id";
@@ -99,7 +100,7 @@ class UsersModel {
     return $this->db->rowCount();
   }
 
-  public function recoveryUser($id) {
+  public function recoverUser($id) {
     $this->db->query('UPDATE users SET is_deleted = 0 WHERE id = :id');
     $this->db->bind('id', $id);
     $this->db->execute();
@@ -107,10 +108,17 @@ class UsersModel {
     return $this->db->rowCount();
   }
 
-  public function checkUserAvailability($username, $email) {
+  public function getUserAmountByUsernameOrEmail($username, $email) {
     $this->db->query('SELECT COUNT(*) FROM users WHERE username = :username OR email = :email');
     $this->db->bind('username', $username);
     $this->db->bind('email', $email);
+
+    return $this->db->row();
+  }
+
+  public function getUserAmountByUsername($username) {
+    $this->db->query('SELECT COUNT(*) FROM users WHERE username = :username');
+    $this->db->bind('username', $username);
 
     return $this->db->row();
   }
@@ -122,7 +130,7 @@ class UsersModel {
     return $this->db->row();
   }
 
-  public function loginUser($user, $password) {
+  public function getUserByUsernameOrEmailAndPassword($user, $password) {
     $this->db->query('SELECT * FROM users WHERE (username = :user OR email = :user) AND password = :password');
     $this->db->bind('user', $user);
     $this->db->bind('password', $password);
@@ -137,20 +145,45 @@ class UsersModel {
     return $this->db->row();
   }
 
-  public function getUserByEmail($email) {
+  public function getUserAmountByEmail($email) {
     $this->db->query('SELECT COUNT(*) FROM users WHERE email = :email');
     $this->db->bind('email', $email);
     
     return $this->db->row();
   }
 
-  public function changePassword($data) {
+  public function updateUserPassword($data) {
     $updatedAt = date('c');
 
     $this->db->query('UPDATE users SET password = :password, updated_at = :updated_at WHERE email = :email');
     $this->db->bind('password', $data['new_password']);
     $this->db->bind('updated_at', $updatedAt);
     $this->db->bind('email', $data['email']);
+    $this->db->execute();
+
+    return $this->db->rowCount();
+  }
+
+  public function getUserInfoByUsername($username) {
+    $this->db->query('SELECT * FROM users WHERE username = :username');
+    $this->db->bind('username', $username);
+
+    return $this->db->single();
+  }
+
+  public function updateProfile($data) {
+    $updatedAt = date('c');
+
+    $query = "UPDATE users SET username = :username, fullname = :fullname, email = :email, phonenumber = :phonenumber, address = :address, updated_at = :updated_at WHERE id = :id";
+
+    $this->db->query($query);
+    $this->db->bind('username', $data['username']);
+    $this->db->bind('fullname', $data['fullname']);
+    $this->db->bind('email', $data['email']);
+    $this->db->bind('phonenumber', $data['phonenumber']);
+    $this->db->bind('address', $data['address']);
+    $this->db->bind('id', $data['id']);
+    $this->db->bind('updated_at', $updatedAt);
     $this->db->execute();
 
     return $this->db->rowCount();

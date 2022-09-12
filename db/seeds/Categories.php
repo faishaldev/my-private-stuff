@@ -59,6 +59,7 @@ class Categories extends AbstractSeed
         );
         
         $categories = $this->table('categories');
+        
         $categories->insert($data)->save();
     }
 }

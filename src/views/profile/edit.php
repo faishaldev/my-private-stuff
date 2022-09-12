@@ -1,6 +1,6 @@
 <?php include_once __DIR__ . '/../layouts/navbar.php' ?>
 
-<form action="<?= BASEURL; ?>/users/update" method="POST">
+<form action="<?= BASEURL; ?>/profile/update" method="POST">
   <input type="hidden" name="id" id="id" value="<?= $data['user']['id']; ?>">
   <div>
     <input type="text" name="username" id="username" placeholder="Username" value="<?= $data['user']['username']; ?>">
@@ -17,10 +17,7 @@
   <div>
     <input type="text" name="address" id="address" placeholder="Address" value="<?= $data['user']['address']; ?>">
   </div>
-  <div>
-    <input type="password" name="password" id="password" placeholder="Password" value="<?= $data['user']['password']; ?>">
-  </div>
   <button type="submit" onclick="return confirm('Are you sure?')">Save</button>
 </form>
-<a href="<?= BASEURL; ?>/users">Back</a>
-<div><?php Flasher::flash(); ?></div>
+
+<a href="<?= BASEURL; ?>/profile">Back</a>

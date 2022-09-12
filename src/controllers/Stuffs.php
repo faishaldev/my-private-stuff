@@ -6,15 +6,20 @@ class Stuffs extends Controller {
       session_start();
     }
 
-    $username = $_SESSION['username'];
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
     
     $data = [
       'title' => 'Stuffs',
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
 
     if ($data['role'] === 'Admin') {
-      $data += ['stuffs' => $this->model('StuffsModel')->getStuffs()];
+      $data += [
+        'stuffs' => $this->model('StuffsModel')->getStuffs()
+      ];
 
       $this->view('templates/header', $data);
       $this->view('stuffs/index', $data);
@@ -23,7 +28,9 @@ class Stuffs extends Controller {
     }
     
     if ($data['role'] === 'User') {
-      $data += ['stuffs' => $this->model('StuffsModel')->getStuffsByUsername($username)];
+      $data += [
+        'stuffs' => $this->model('StuffsModel')->getStuffsByUsername($_SESSION['username'])
+      ];
 
       $this->view('templates/header', $data);
       $this->view('stuffs/index', $data);
@@ -37,12 +44,15 @@ class Stuffs extends Controller {
       session_start();
     }
 
-    $username = $_SESSION['username'];
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
 
     $data = [
       'title' => 'Add Stuff',
       'categories' => $this->model('CategoriesModel')->getCategories(),
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
 
     $this->view('templates/header', $data);
@@ -63,13 +73,16 @@ class Stuffs extends Controller {
       session_start();
     }
 
-    $username = $_SESSION['username'];
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
 
     $data = [
       'title' => 'Edit Stuff',
       'stuff' => $this->model('StuffsModel')->getStuffById($id),
       'categories' => $this->model('CategoriesModel')->getCategories(),
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
 
     $this->view('templates/header', $data);
@@ -78,7 +91,7 @@ class Stuffs extends Controller {
   }
 
   public function update() {
-    if ($this->model('StuffsModel')->editUser($_POST) > 0) {
+    if ($this->model('StuffsModel')->updateStuff($_POST) > 0) {
       Flasher::setFlash('Stuff has been updated!');
       header('Location: ' . BASEURL . '/stuffs');
       exit;

@@ -37,7 +37,7 @@ class CategoriesModel {
     return $this->db->single();
   }
 
-  public function editUser($data) {
+  public function updateCategory($data) {
     $updatedAt = date('c');
 
     $query = "UPDATE categories SET name = :name, description = :description, updated_at = :updated_at WHERE id = :id";
@@ -60,13 +60,13 @@ class CategoriesModel {
     return $this->db->rowCount();
   }
 
-  public function getCategoryAmount() {
+  public function getCategoriesAmount() {
     $this->db->query('SELECT COUNT(*) FROM categories');
 
     return $this->db->row();
   }
 
-  public function getCategoryAmountByUsername($username) {
+  public function getCategoriesAmountByUsername($username) {
     $this->db->query('SELECT COUNT(*) FROM categories JOIN users ON categories.user_id = users.id WHERE users.username = :username');
     $this->db->bind('username', $username);
 

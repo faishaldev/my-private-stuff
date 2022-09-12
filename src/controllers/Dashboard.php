@@ -6,18 +6,21 @@ class Dashboard extends Controller {
       header('Location: ' . BASEURL);
       exit;
     }
-
-    $username = $_SESSION['username'];
+    
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
 
     $data = [
       'title' => 'Dashboard',
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
 
     if ($data['role'] === 'Admin') {
       $data += [
-        'amount_category' => $this->model('CategoriesModel')->getCategoryAmount(),
-        'amount_stuff' => $this->model('StuffsModel')->getStuffAmount()
+        'amount_category' => $this->model('CategoriesModel')->getCategoriesAmount(),
+        'amount_stuff' => $this->model('StuffsModel')->getStuffsAmount()
       ];
 
       $this->view('templates/header', $data);
@@ -28,8 +31,8 @@ class Dashboard extends Controller {
 
     if ($data['role'] === 'User') {
       $data += [
-        'amount_category' => $this->model('CategoriesModel')->getCategoryAmountByUsername($username),
-        'amount_stuff' => $this->model('StuffsModel')->getStuffAmountByUsername($username)
+        'amount_category' => $this->model('CategoriesModel')->getCategoriesAmountByUsername($_SESSION['username']),
+        'amount_stuff' => $this->model('StuffsModel')->getStuffsAmountByUsername($_SESSION['username'])
       ];
 
       $this->view('templates/header', $data);

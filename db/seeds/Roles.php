@@ -21,6 +21,7 @@ class Roles extends AbstractSeed
         );
 
         $roles = $this->table('roles');
+        
         $roles->insert($data)->save();
     }
 }

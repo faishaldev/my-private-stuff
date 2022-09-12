@@ -6,15 +6,20 @@ class Categories extends Controller {
       session_start();
     }
 
-    $username = $_SESSION['username'];
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
 
     $data = [
       'title' => 'Categories',
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
     
     if ($data['role'] === 'Admin') {
-      $data += ['categories' => $this->model('CategoriesModel')->getCategories()];
+      $data += [
+        'categories' => $this->model('CategoriesModel')->getCategories()
+      ];
 
       $this->view('templates/header', $data);
       $this->view('categories/index', $data);
@@ -23,7 +28,9 @@ class Categories extends Controller {
     }
 
     if ($data['role'] === 'User') {
-      $data += ['categories' => $this->model('CategoriesModel')->getCategoriesByUsername($username)];
+      $data += [
+        'categories' => $this->model('CategoriesModel')->getCategoriesByUsername($_SESSION['username'])
+      ];
 
       $this->view('templates/header', $data);
       $this->view('categories/index', $data);
@@ -37,11 +44,14 @@ class Categories extends Controller {
       session_start();
     }
 
-    $username = $_SESSION['username'];
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
 
     $data = [
       'title' => 'Add Category',
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
 
     $this->view('templates/header', $data);
@@ -64,12 +74,15 @@ class Categories extends Controller {
       session_start();
     }
 
-    $username = $_SESSION['username'];
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
 
     $data = [
       'title' => 'Edit Category',
       'category' => $this->model('CategoriesModel')->getCategoryById($id),
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($username)
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
 
     $this->view('templates/header', $data);
@@ -78,7 +91,7 @@ class Categories extends Controller {
   }
 
   public function update() {
-    if($this->model('CategoriesModel')->editUser($_POST) > 0) {
+    if($this->model('CategoriesModel')->updateCategory($_POST) > 0) {
       Flasher::setFlash('Category has been updated!');
       header('Location: ' . BASEURL . '/categories');
       exit;
@@ -86,7 +99,7 @@ class Categories extends Controller {
   }
 
   public function delete($id) {
-    if ($this->model('StuffsModel')->getStuffAmountByCategoryId($id) > 0) {
+    if ($this->model('StuffsModel')->getStuffsAmountByCategoryId($id) > 0) {
       Flasher::setFlash('Cannot delete, there are stuff with this category!');
       header('Location: ' . BASEURL . '/categories');
       exit;

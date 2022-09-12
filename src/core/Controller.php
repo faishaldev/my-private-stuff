@@ -14,6 +14,8 @@ class Controller {
       require_once '../src/views/users/register.php';
     } else if (isset($_GET['login'])) {
       require_once '../src/views/users/login.php';
+    } else if (isset($_GET['about'])) {
+      require_once '../src/views/about/index.php';
     } else {
       require_once '../src/views/home/index.php';
     }
