@@ -171,7 +171,7 @@ class UsersModel {
     return $this->db->single();
   }
 
-  public function updateProfile($data) {
+  public function updateUserProfile($data) {
     $updatedAt = date('c');
 
     $query = "UPDATE users SET username = :username, fullname = :fullname, email = :email, phonenumber = :phonenumber, address = :address, updated_at = :updated_at WHERE id = :id";
@@ -184,6 +184,22 @@ class UsersModel {
     $this->db->bind('address', $data['address']);
     $this->db->bind('id', $data['id']);
     $this->db->bind('updated_at', $updatedAt);
+    $this->db->execute();
+
+    return $this->db->rowCount();
+  }
+
+  public function getUserEmailByUsername($username) {
+    $this->db->query('SELECT email FROM users WHERE username = :username');
+    $this->db->bind('username', $username);
+
+    return $this->db->row();
+  }
+
+  public function changeUserPasswordByUsername($newPassword, $username) {
+    $this->db->query('UPDATE users SET password = :password WHERE username = :username');
+    $this->db->bind('password', $newPassword);
+    $this->db->bind('username', $username);
     $this->db->execute();
 
     return $this->db->rowCount();

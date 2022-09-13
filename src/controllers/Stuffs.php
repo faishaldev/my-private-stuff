@@ -51,9 +51,20 @@ class Stuffs extends Controller {
 
     $data = [
       'title' => 'Add Stuff',
-      'categories' => $this->model('CategoriesModel')->getCategories(),
       'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
     ];
+
+    if ($data['role'] === 'Admin') {
+      $data += [
+        'categories' => $this->model('CategoriesModel')->getCategories()
+      ];
+    }
+
+    if ($data['role'] === 'User') {
+      $data += [
+        'categories' => $this->model('CategoriesModel')->getCategoriesByUsername($_SESSION['username'])
+      ];
+    }
 
     $this->view('templates/header', $data);
     $this->view('stuffs/add', $data);

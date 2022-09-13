@@ -6,7 +6,7 @@
 </nav>
 <form action="<?= BASEURL; ?>/users/change" method="POST">
   <div>
-    <input type="text" name="email" id="email" placeholder="Email" required>
+    <input type="text" name="email" id="email" placeholder="Email" required autofocus>
   </div>
   <div>
     <input type="password" name="new_password" id="new_password" placeholder="New password" required>

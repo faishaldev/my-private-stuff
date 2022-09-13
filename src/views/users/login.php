@@ -6,7 +6,7 @@
 </nav>
 <form action="<?= BASEURL; ?>/users/signin" method="POST">
   <div>
-    <input type="text" name="user" id="user" placeholder="Username/Email" required>
+    <input type="text" name="user" id="user" placeholder="Username/Email" required autofocus>
   </div>
   <div>
     <input type="password" name="password" id="password" placeholder="Password" required>

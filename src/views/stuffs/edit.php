@@ -1,5 +1,6 @@
 <?php include_once __DIR__ . '/../layouts/navbar.php' ?>
 
+<h1>Edit Stuff</h1>
 <form action="<?= BASEURL; ?>/stuffs/update" method="POST">
   <input type="hidden" name="id" id="id" value="<?= $data['stuff']['id']; ?>">
   <div>

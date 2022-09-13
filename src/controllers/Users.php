@@ -166,7 +166,8 @@ class Users extends Controller {
     }
 
     $data = [
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username']),
+      'user' => $this->model('UsersModel')->getUserById($_POST['id'])
     ];
 
     if ($data['role'] === 'User') {
@@ -175,15 +176,19 @@ class Users extends Controller {
     }
 
     if ($this->model('UsersModel')->getUserAmountByUsername($_POST['username']) > 0) {
-      Flasher::setFlash('Username has been used!');
-      header('Location: ' . BASEURL . '/users/edit/' . $_POST['id']);
-      exit;
+      if ($_POST['username'] !== $data['user']['username']) {
+        Flasher::setFlash('Username has been used!');
+        header('Location: ' . BASEURL . '/users/edit/' . $_POST['id']);
+        exit;
+      }
     }
 
-    if ($this->model('UsersModel')->getUserAmounByEmail($_POST['email']) > 0) {
-      Flasher::setFlash('Email has been used!');
-      header('Location: ' . BASEURL . '/users/edit/' . $_POST['id']);
-      exit;
+    if ($this->model('UsersModel')->getUserAmountByEmail($_POST['email'])) {
+      if ($_POST['email'] !== $data['user']['email']) {
+        Flasher::setFlash('Email has been used!');
+        header('Location: ' . BASEURL . '/users/edit/' . $_POST['id']);
+        exit;
+      }
     }
 
     if ($this->model('UsersModel')->updateUser($_POST) > 0) {
