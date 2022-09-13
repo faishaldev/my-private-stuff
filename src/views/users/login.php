@@ -11,7 +11,7 @@
   <div>
     <input type="password" name="password" id="password" placeholder="Password" required>
   </div>
-  <button>Login</button>
+  <button type="submit">Login</button>
 </form>
 <div>
   <a href="?reset=true">Forgot Password</a>

@@ -4,7 +4,7 @@
     <li><a href="<?= BASEURL; ?>">Home</a></li>
   </ul>
 </nav>
-<form action="<?= BASEURL; ?>/users/create" method="POST">
+<form action="<?= BASEURL; ?>/users/signup" method="POST">
   <div>
     <input type="text" name="username" id="username" placeholder="Username" required autofocus>
   </div>
@@ -23,6 +23,7 @@
   <div>
     <input type="password" name="password" id="password" placeholder="Password" required>
   </div>
-  <button>Register</button>
+  <button type="submit" onclick="return confirm('Are you sure?')">Register</button>
 </form>
 <a href="?login=true">Login</a>
+<div><?php Flasher::flash(); ?></div>
