@@ -1,5 +1,11 @@
 <?php
 
+require '../vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 class Users extends Controller {
   public function index() {
     if (!isset($_SESSION)) { 
@@ -289,7 +295,7 @@ class Users extends Controller {
             }
             
             Flasher::setFlash('Account not activated yet!');
-            header('Location: ' . BASEURL);
+            header('Location: ' . BASEURL . '/?login=true');
             exit;
           }
           
@@ -374,6 +380,49 @@ class Users extends Controller {
 
     if ($this->model('UsersModel')->addUser($_POST) > 0) {
       Flasher::setFlash('Account has been created! Check your email for activation!');
+      header('Location: ' . BASEURL . '/?login=true');
+      exit;
+    }
+  }
+
+  public function send($id) {
+    $email = $this->model('UsersModel')->getEmailById($id);
+    $fullname = $this->model('UsersModel')->getFullnameById($id);
+
+    $mail = new PHPMailer(true);
+
+    try {
+      $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+      $mail->isSMTP();
+      $mail->Host = SMTP_HOST;
+      $mail->SMTPAuth = true;
+      $mail->Username = USER_EMAIL;
+      $mail->Password = USER_PASSWORD;
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+      $mail->Port = SMTP_PORT;
+
+      $mail->setFrom('myprivatestuff@mail.com', 'My Private Stuff');
+      $mail->addAddress($email, $fullname);
+
+      $mail->isHTML(true);
+      $mail->Subject = "Email Activation for My Private Stuff Account";
+      $mail->Body = "Here the link for activate your account: \n" . BASEURL . "/users/activation/" . $id;
+
+      $mail->send();
+
+      Flasher::setFlash('Email activation has been sent!');
+      header('Location: ' . BASEURL . '/users');
+      exit;
+    } catch (Exception $err) {
+      Flasher::setFlash('Email not sent: ' . $mail->ErrorInfo);
+      header('Location: ' . BASEURL . '/users');
+      exit;
+    }
+  }
+
+  public function activation($id) {
+    if ($this->model('UsersModel')->activateUser($id) > 0) {
+      Flasher::setFlash('Your account has been activated!');
       header('Location: ' . BASEURL . '/?login=true');
       exit;
     }

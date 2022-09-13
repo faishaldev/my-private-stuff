@@ -71,7 +71,10 @@
             </form>
           <?php
           } else { ?>
-            <form action="<?= BASEURL; ?>/users/activate/<?= $user['id']; ?>" method="POST">
+            <form action="<?= BASEURL; ?>/users/send/<?= $user['id']; ?>">
+              <button type="submit" onclick="return confirm('Are you sure?')">Send Email</button>
+            </form>
+            <form action="<?= BASEURL; ?>/users/activation/<?= $user['id']; ?>" method="POST">
               <button type="submit" onclick="return confirm('Are you sure?')">Activate</button>
             </form>
             <form action="<?= BASEURL; ?>/users/edit/<?= $user['id']; ?>" method="POST">

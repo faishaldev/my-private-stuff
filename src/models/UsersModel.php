@@ -204,4 +204,18 @@ class UsersModel {
 
     return $this->db->rowCount();
   }
+
+  public function getEmailById($id) {
+    $this->db->query('SELECT email FROM users WHERE id = :id');
+    $this->db->bind('id', $id);
+
+    return $this->db->row();
+  }
+
+  public function getFullnameById($id) {
+    $this->db->query('SELECT fullname FROM users WHERE id = :id');
+    $this->db->bind('id', $id);
+
+    return $this->db->row();
+  }
 }
