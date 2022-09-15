@@ -17,3 +17,4 @@
   <h4>It will makes you easy to manage your private stuff</h4>
   <h5>You can also borrow stuff to other user with an owner permission</h5>
 </header>
+<div><?php Flasher::flash(); ?></div>

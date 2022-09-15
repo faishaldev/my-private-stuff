@@ -14,7 +14,7 @@
   <button type="submit">Login</button>
 </form>
 <div>
-  <a href="?reset=true">Forgot Password</a>
+  <a href="?forgot=true">Forgot Password</a>
 </div>
 <div>
   <a href="?register=true">Register</a>

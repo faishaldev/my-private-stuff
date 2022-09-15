@@ -1,16 +1,12 @@
-<h1>Reset Password</h1>
+<h1>Forgot Password</h1>
 <nav>
   <ul>
     <li><a href="<?= BASEURL; ?>">Home</a></li>
   </ul>
 </nav>
-<form action="<?= BASEURL; ?>/users/change" method="POST">
-  <input type="email" name="email" id="email" value="<?php $data['email'] ?>">
+<form action="<?= BASEURL; ?>/users/password" method="POST">
   <div>
     <input type="text" name="email" id="email" placeholder="Email" required autofocus>
-  </div>
-  <div>
-    <input type="password" name="new_password" id="new_password" placeholder="New password" required>
   </div>
   <button type="submit">Submit</button>
 </form>

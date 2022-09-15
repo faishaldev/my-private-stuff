@@ -100,6 +100,14 @@ class UsersModel {
     return $this->db->rowCount();
   }
 
+  public function removeUser($id) {
+    $this->db->query('DELETE FROM users WHERE id = :id');
+    $this->db->bind('id', $id);
+    $this->db->execute();
+
+    return $this->db->rowCount();
+  }
+
   public function recoverUser($id) {
     $this->db->query('UPDATE users SET is_deleted = 0 WHERE id = :id');
     $this->db->bind('id', $id);
@@ -216,6 +224,27 @@ class UsersModel {
     $this->db->query('SELECT fullname FROM users WHERE id = :id');
     $this->db->bind('id', $id);
 
+    return $this->db->row();
+  }
+
+  public function checkEmailAvailability($email) {
+    $this->db->query('SELECT COUNT(*) FROM users WHERE email = :email');
+    $this->db->bind('email', $email);
+
+    return $this->db->row();
+  }
+
+  public function getFullnameByEmail($email) {
+    $this->db->query('SELECT fullname FROM users WHERE email = :email');
+    $this->db->bind('email', $email);
+
+    return $this->db->row();
+  }
+
+  public function checkPassword($password) {
+    $this->db->query('SELECT COUNT(*) FROM users WHERE password = :password');
+    $this->db->bind('password', $password);
+    
     return $this->db->row();
   }
 }

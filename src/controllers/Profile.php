@@ -96,7 +96,12 @@ class Profile extends Controller {
     $userPassword = $this->model('UsersModel')->getPasswordByUsernameOrEmail($_SESSION['username']);
 
     if (password_verify($_POST['old_password'], $userPassword)) {
-      var_dump($_POST['old_password'], $userPassword);
+      if ($_POST['new_password'] === $_POST['old_password'] ) {
+        Flasher::setFlash('Password has been used by yourself!');
+        header('Location: ' . BASEURL . '/profile/change');
+        exit;
+      }
+
       $hashedNewPassword = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
 
       if ($this->model('UsersModel')->changeUserPasswordByUsername($hashedNewPassword, $_SESSION['username'])) {

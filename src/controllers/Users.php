@@ -108,9 +108,11 @@ class Users extends Controller {
 
     if ($data['role'] === 'User') {
       header('Location: ' . BASEURL . '/dashboard');
+      exit;
     }
 
     if ($this->model('UsersModel')->activateUser($id) > 0) {
+      Flasher::setFlash('User account has been activated!');
       header('Location: ' . BASEURL . '/users');
       exit;
     }
@@ -135,6 +137,7 @@ class Users extends Controller {
     }
 
     if ($this->model('UsersModel')->deactivateUser($id) > 0) {
+      Flasher::setFlash('User account has been deactivated!');
       header('Location: ' . BASEURL . '/users');
       exit;
     }
@@ -173,7 +176,7 @@ class Users extends Controller {
 
     $data = [
       'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username']),
-      'user' => $this->model('UsersModel')->getUserById($_POST['id'])
+      'user' => $this->model('UsersModel')->getUserById($_POST['id']),
     ];
 
     if ($data['role'] === 'User') {
@@ -197,8 +200,12 @@ class Users extends Controller {
       }
     }
 
+    if (!$this->model('UsersModel')->checkPassword($_POST['password'])) {
+      $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    }
+
     if ($this->model('UsersModel')->updateUser($_POST) > 0) {
-      Flasher::setFlash('User has been updated!');
+      Flasher::setFlash('User account has been updated!');
       header('Location: ' . BASEURL . '/users');
       exit;
     }
@@ -220,9 +227,36 @@ class Users extends Controller {
 
     if ($data['role'] === 'User') {
       header('Location: ' . BASEURL . '/dashboard');
+      exit;
     }
 
     if ($this->model('UsersModel')->deleteUser($id) > 0) {
+      Flasher::setFlash('User account has been deleted!');
+      header('Location: ' . BASEURL . '/users');
+      exit;
+    }
+  }
+
+  public function remove($id) {
+    if (!isset($_SESSION)) {
+      session_start();
+    }
+
+    if (!isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL . '/dashboard');
+      exit;
+    }
+
+    $data = [
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+    ];
+
+    if ($data['role'] === 'User') {
+      header('Location: ' . BASEURL . '/dashboard');
+    }
+
+    if ($this->model('UsersModel')->removeUser($id) > 0) {
+      Flasher::setFlash('User account has been removed from database!');
       header('Location: ' . BASEURL . '/users');
       exit;
     }
@@ -247,6 +281,7 @@ class Users extends Controller {
     }
 
     if ($this->model('UsersModel')->recoverUser($id) > 0) {
+      Flasher::setFlash('User account has been recovered!');
       header('Location: ' . BASEURL . '/users');
       exit;
     }
@@ -268,7 +303,7 @@ class Users extends Controller {
   }
 
   public function signin() {
-    if ($this->model('UsersModel')->getUserByUsernameOrEmailAndPassword($_POST['user'], $_POST['user']) > 0) {
+    if ($this->model('UsersModel')->getUserAmountByUsernameOrEmail($_POST['user'], $_POST['user']) > 0) {
       $userPasswordHashed = $this->model('UsersModel')->getPasswordByUsernameOrEmail($_POST['user']);
 
       if (password_verify($_POST['password'], $userPasswordHashed)) {
@@ -283,6 +318,7 @@ class Users extends Controller {
             }
   
             $_SESSION['username'] = $row['username'];
+            Flasher::setFlash('You are now login!');
             header('Location: ' . BASEURL . '/dashboard');
             exit;
           }
@@ -306,22 +342,23 @@ class Users extends Controller {
         header('Location: ' . BASEURL . '/?login=true');
         exit;
       }
-    } else {
-      Flasher::setFlash('Username/email not found!');
-      header('Location: ' . BASEURL);
     }
+
+    Flasher::setFlash('Username/email not found!');
+    header('Location: ' . BASEURL . '/?login=true');
+    exit;
   }
 
   public function logout() {
     session_start();
     unset($_SESSION['username']);
-    session_destroy();
-    header('Location: ' . BASEURL . '');
+    Flasher::setFlash('You have been logged out!');
+    header('Location: ' . BASEURL);
   }
 
-  public function reset() {
+  public function forgot() {
     $data = [
-      'title' => 'Reset Password'
+      'title' => 'Forgot Password'
     ];
 
     if (isset($_SESSION['username'])) {
@@ -330,8 +367,63 @@ class Users extends Controller {
     }
 
     $this->view('templates/header', $data);
-    $this->view('users/reset');
+    $this->view('users/forgot');
     $this->view('templtes/footer');
+  }
+
+  public function password() {
+    if ($this->model('UsersModel')->checkEmailAvailability($_POST['email']) > 0) {
+      $fullname = $this->model('UsersModel')->getFullnameById($_POST['email']);
+
+      $mail = new PHPMailer(true);
+
+      try {
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host = SMTP_HOST;
+        $mail->SMTPAuth = true;
+        $mail->Username = USER_EMAIL;
+        $mail->Password = USER_PASSWORD;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = SMTP_PORT;
+
+        $mail->setFrom('myprivatestuff@mail.com', 'My Private Stuff');
+        $mail->addAddress($_POST['email'], $fullname);
+
+        $mail->isHTML(true);
+        $mail->Subject = "Email Reset Password for My Private Stuff Account";
+        $mail->Body = "Here the link for reset your account password: \n" . BASEURL . '/users/reset/' . $_POST['email'];
+
+        $mail->send();
+
+        Flasher::setFlash('Email to reset password has been sent!');
+        header('Location: ' . BASEURL . '/?forgot=true');
+        exit;
+      } catch (Exception $err) {
+        Flasher::setFlash('Email not sent: ' . $mail->ErrorInfo);
+        header('Location: ' . BASEURL . '/?forgot=true');
+        exit;
+      }
+    }
+
+    Flasher::setFlash('Email not found!');
+    header('Location: ' . BASEURL . '/?forgot=true');
+    exit;
+  }
+
+  public function reset() {
+    if (isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
+    $data = [
+      'title' => "Reset Password",
+    ];
+    
+    $this->view('templates/header', $data);
+    $this->view('users/reset', $data);
+    $this->view('templates/footer');
   }
 
   public function change() {
