@@ -1,7 +1,7 @@
 <?php
 
 class Stuffs extends Controller {
-  public function index() {
+  public function session() {
     if (!isset($_SESSION)) { 
       session_start();
     }
@@ -10,7 +10,11 @@ class Stuffs extends Controller {
       header('Location: ' . BASEURL);
       exit;
     }
-    
+  }
+
+  public function index() {
+    $this->session();
+
     $data = [
       'title' => 'Stuffs',
       'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
@@ -40,14 +44,7 @@ class Stuffs extends Controller {
   }
 
   public function add() {
-    if (!isset($_SESSION)) { 
-      session_start();
-    }
-
-    if (!isset($_SESSION['username'])) {
-      header('Location: ' . BASEURL);
-      exit;
-    }
+    $this->session();
 
     $data = [
       'title' => 'Add Stuff',
@@ -72,7 +69,7 @@ class Stuffs extends Controller {
   }
 
   public function create() {
-    if ($this->model('StuffsModel')->addStuff($_POST) > 0) {
+    if ($this->model('StuffsModel')->addStuff($_POST)) {
       Flasher::setFlash('New stuff has been added!');
       header('Location: ' . BASEURL . '/stuffs');
       exit;
@@ -80,20 +77,13 @@ class Stuffs extends Controller {
   }
 
   public function edit($id) {
-    if (!isset($_SESSION)) { 
-      session_start();
-    }
-
-    if (!isset($_SESSION['username'])) {
-      header('Location: ' . BASEURL);
-      exit;
-    }
+    $this->session();
 
     $data = [
       'title' => 'Edit Stuff',
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username']),
       'stuff' => $this->model('StuffsModel')->getStuffById($id),
-      'categories' => $this->model('CategoriesModel')->getCategories(),
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+      'categories' => $this->model('CategoriesModel')->getCategories()
     ];
 
     $this->view('templates/header', $data);
@@ -102,7 +92,7 @@ class Stuffs extends Controller {
   }
 
   public function update() {
-    if ($this->model('StuffsModel')->updateStuff($_POST) > 0) {
+    if ($this->model('StuffsModel')->updateStuff($_POST)) {
       Flasher::setFlash('Stuff has been updated!');
       header('Location: ' . BASEURL . '/stuffs');
       exit;
@@ -110,7 +100,7 @@ class Stuffs extends Controller {
   }
 
   public function delete($id) {
-    if ($this->model('StuffsModel')->deleteStuff($id) > 0) {
+    if ($this->model('StuffsModel')->deleteStuff($id)) {
       Flasher::setFlash('Stuff has been deleted!');
       header('Location: '. BASEURL . '/stuffs');
       exit;

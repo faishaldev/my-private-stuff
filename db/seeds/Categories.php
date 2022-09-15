@@ -22,7 +22,7 @@ class Categories extends AbstractSeed
                 'name' => 'Electronics',
                 'description' => 'My favorite electronics list',
                 'created_at' => '2022',
-                'updated_at' => '2022',
+                'updated_at' => '2022'
             ),
             array(
                 'id' => 'category-345',

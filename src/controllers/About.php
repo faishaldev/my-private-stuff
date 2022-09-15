@@ -1,7 +1,7 @@
 <?php
 
 class About extends Controller {
-  public function index() {
+  public function session() {
     if (!isset($_SESSION)) { 
       session_start();
     }
@@ -10,7 +10,11 @@ class About extends Controller {
       header('Location: ' . BASEURL);
       exit;
     }
+  }
 
+  public function index() {
+    $this->session();
+    
     $data = [
       'title' => 'About',
       'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])

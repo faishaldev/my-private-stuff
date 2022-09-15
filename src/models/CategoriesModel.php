@@ -11,25 +11,6 @@ class CategoriesModel {
     return $this->db->resultSet();
   }
 
-  public function addCategory($data, $userId) {
-    $id = uniqid('category-');
-    $createdAt = date('c');
-    $updatedAt = $createdAt;
-
-    $query = "INSERT INTO categories VALUES (:id, :user_id, :name, :description, :created_at, :updated_at)";
-
-    $this->db->query($query);
-    $this->db->bind('id', $id);
-    $this->db->bind('user_id', $userId);
-    $this->db->bind('name', $data['name']);
-    $this->db->bind('description', $data['description']);
-    $this->db->bind('created_at', $createdAt);
-    $this->db->bind('updated_at', $updatedAt);
-    $this->db->execute();
-
-    return $this->db->rowCount();
-  }
-
   public function getCategoryById($id) {
     $this->db->query('SELECT * FROM categories WHERE id = :id');
     $this->db->bind('id', $id);
@@ -37,27 +18,11 @@ class CategoriesModel {
     return $this->db->single();
   }
 
-  public function updateCategory($data) {
-    $updatedAt = date('c');
+  public function getCategoriesByUsername($username) {
+    $this->db->query('SELECT categories.*, users.username FROM categories JOIN users ON categories.user_id = users.id WHERE users.username = :username ORDER BY categories.created_at DESC');
+    $this->db->bind('username', $username);
 
-    $query = "UPDATE categories SET name = :name, description = :description, updated_at = :updated_at WHERE id = :id";
-
-    $this->db->query($query);
-    $this->db->bind('name', $data['name']);
-    $this->db->bind('description', $data['description']);
-    $this->db->bind('updated_at', $updatedAt);
-    $this->db->bind('id', $data['id']);
-    $this->db->execute();
-
-    return $this->db->rowCount();
-  }
-
-  public function deleteCategory($id) {
-    $this->db->query('DELETE FROM categories WHERE id = :id');
-    $this->db->bind('id', $id);
-    $this->db->execute();
-
-    return $this->db->rowCount();
+    return $this->db->resultSet();
   }
 
   public function getCategoriesAmount() {
@@ -73,10 +38,41 @@ class CategoriesModel {
     return $this->db->row();
   }
 
-  public function getCategoriesByUsername($username) {
-    $this->db->query('SELECT categories.*, users.username FROM categories JOIN users ON categories.user_id = users.id WHERE users.username = :username ORDER BY categories.created_at DESC');
-    $this->db->bind('username', $username);
+  public function addCategory($data, $userId) {
+    $id = uniqid('category-');
+    $createdAt = date('c');
+    $updatedAt = $createdAt;
+    
+    $this->db->query('INSERT INTO categories VALUES (:id, :user_id, :name, :description, :created_at, :updated_at)');
+    $this->db->bind('id', $id);
+    $this->db->bind('user_id', $userId);
+    $this->db->bind('name', $data['name']);
+    $this->db->bind('description', $data['description']);
+    $this->db->bind('created_at', $createdAt);
+    $this->db->bind('updated_at', $updatedAt);
+    $this->db->execute();
 
-    return $this->db->resultSet();
+    return $this->db->rowCount();
+  }
+
+  public function updateCategory($data) {
+    $updatedAt = date('c');
+
+    $this->db->query('UPDATE categories SET name = :name, description = :description, updated_at = :updated_at WHERE id = :id');
+    $this->db->bind('name', $data['name']);
+    $this->db->bind('description', $data['description']);
+    $this->db->bind('updated_at', $updatedAt);
+    $this->db->bind('id', $data['id']);
+    $this->db->execute();
+
+    return $this->db->rowCount();
+  }
+
+  public function deleteCategory($id) {
+    $this->db->query('DELETE FROM categories WHERE id = :id');
+    $this->db->bind('id', $id);
+    $this->db->execute();
+
+    return $this->db->rowCount();
   }
 }

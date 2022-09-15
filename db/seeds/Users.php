@@ -19,7 +19,8 @@ class Users extends AbstractSeed
                 'address' => 'Semarang',
                 'is_active' => true,
                 'created_at' => '2022',
-                'updated_at' => '2022'
+                'updated_at' => '2022',
+                'last_login' => '2022'
             ),
             array(
                 'id' => 'user-234',
@@ -32,7 +33,8 @@ class Users extends AbstractSeed
                 'address' => 'Semarang',
                 'is_active' => true,
                 'created_at' => '2022',
-                'updated_at' => '2022'
+                'updated_at' => '2022',
+                'last_login' => '2022'
             ),
             array(
                 'id' => 'user-345',
@@ -45,7 +47,8 @@ class Users extends AbstractSeed
                 'address' => 'Semarang',
                 'is_active' => true,
                 'created_at' => '2022',
-                'updated_at' => '2022'
+                'updated_at' => '2022',
+                'last_login' => '2022'
             ),
             array(
                 'id' => 'user-456',
@@ -57,7 +60,8 @@ class Users extends AbstractSeed
                 'phonenumber' => '84567891012',
                 'address' => 'Semarang',
                 'created_at' => '2022',
-                'updated_at' => '2022'
+                'updated_at' => '2022',
+                'last_login' => '2022'
             )
         );
 

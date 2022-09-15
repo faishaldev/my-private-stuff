@@ -1,5 +1,6 @@
 <?php include_once __DIR__ . '/../layouts/navbar.php' ?>
 
+<h1>Add User</h1>
 <form action="<?= BASEURL; ?>/users/create" method="POST">
   <div>
     <input type="text" name="username" id="username" placeholder="Username" required autofocus>

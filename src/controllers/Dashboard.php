@@ -6,11 +6,6 @@ class Dashboard extends Controller {
       header('Location: ' . BASEURL);
       exit;
     }
-    
-    if (!isset($_SESSION['username'])) {
-      header('Location: ' . BASEURL);
-      exit;
-    }
 
     $data = [
       'title' => 'Dashboard',

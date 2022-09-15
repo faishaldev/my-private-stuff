@@ -1,7 +1,7 @@
 <?php
 
 class Profile extends Controller {
-  public function index() {
+  public function session() {
     if (!isset($_SESSION)) {
       session_start();
     }
@@ -10,14 +10,15 @@ class Profile extends Controller {
       header('Location: ' . BASEURL);
       exit;
     }
+  }
 
+  public function index() {
+    $this->session();
+    
     $data = [
       'title' => 'Profile',
-    ];
-
-    $data += [
       'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username']),
-      'user' => $this->model('UsersModel')->getUserInfoByUsername($_SESSION['username'])
+      'user' => $this->model('UsersModel')->getUserByUsername($_SESSION['username'])
     ];
 
     $this->view('templates/header', $data);
@@ -26,14 +27,7 @@ class Profile extends Controller {
   }
 
   public function edit() {
-    if (!isset($_SESSION)) {
-      session_start();
-    }
-
-    if (!isset($_SESSION['username'])) {
-      header('Location: ' . BASEURL);
-      exit;
-    }
+    $this->session();
 
     $data = [
       'title' => 'Edit Profile',
@@ -55,9 +49,9 @@ class Profile extends Controller {
       }
     }
 
-    $email = $this->model('UsersModel')->getUserEmailByUsername($_SESSION['username']);
-
     if ($this->model('UsersModel')->getUserAmountByEmail($_POST['email'])) {
+      $email = $this->model('UsersModel')->getUserEmailByUsername($_SESSION['username']);
+
       if ($_POST['email'] !== $email) {
         Flasher::setFlash('Email has been used!');
         header('Location: ' . BASEURL . '/profile/edit/' . $_POST['id']);
@@ -65,7 +59,7 @@ class Profile extends Controller {
       }
     }
 
-    if ($this->model('UsersModel')->updateUserProfile($_POST) > 0) {
+    if ($this->model('UsersModel')->updateUserProfile($_POST)) {
       Flasher::setFlash('Profile has been updated!');
       header('Location: ' . BASEURL . '/profile');
       exit;
@@ -73,14 +67,7 @@ class Profile extends Controller {
   }
 
   public function change() {
-    if (!isset($_SESSION)) {
-      session_start();
-    }
-
-    if (!isset($_SESSION['username'])) {
-      header('Location: ' . BASEURL);
-      exit;
-    }
+    $this->session();
 
     $data = [
       'title' => 'Change Password',

@@ -1,7 +1,7 @@
 <?php
 
 class Categories extends Controller {
-  public function index() {
+  public function session() {
     if (!isset($_SESSION)) { 
       session_start();
     }
@@ -10,7 +10,11 @@ class Categories extends Controller {
       header('Location: ' . BASEURL);
       exit;
     }
+  }
 
+  public function index() {
+    $this->session();
+    
     $data = [
       'title' => 'Categories',
       'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
@@ -40,14 +44,7 @@ class Categories extends Controller {
   }
 
   public function add() {
-    if (!isset($_SESSION)) { 
-      session_start();
-    }
-
-    if (!isset($_SESSION['username'])) {
-      header('Location: ' . BASEURL);
-      exit;
-    }
+    $this->session();
 
     $data = [
       'title' => 'Add Category',
@@ -62,7 +59,7 @@ class Categories extends Controller {
   public function create() {
     $userId = $this->model('UsersModel')->getUserIdByUsername($_POST['username']);
 
-    if ($this->model('CategoriesModel')->addCategory($_POST, $userId) > 0) {
+    if ($this->model('CategoriesModel')->addCategory($_POST, $userId)) {
       Flasher::setFlash('New category has been added!');
       header('Location: ' . BASEURL . '/categories');
       exit;
@@ -70,19 +67,12 @@ class Categories extends Controller {
   }
 
   public function edit($id) {
-    if (!isset($_SESSION)) { 
-      session_start();
-    }
-
-    if (!isset($_SESSION['username'])) {
-      header('Location: ' . BASEURL);
-      exit;
-    }
+    $this->session();
 
     $data = [
       'title' => 'Edit Category',
-      'category' => $this->model('CategoriesModel')->getCategoryById($id),
-      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username'])
+      'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username']),
+      'category' => $this->model('CategoriesModel')->getCategoryById($id)
     ];
 
     $this->view('templates/header', $data);
@@ -91,7 +81,7 @@ class Categories extends Controller {
   }
 
   public function update() {
-    if($this->model('CategoriesModel')->updateCategory($_POST) > 0) {
+    if($this->model('CategoriesModel')->updateCategory($_POST)) {
       Flasher::setFlash('Category has been updated!');
       header('Location: ' . BASEURL . '/categories');
       exit;
@@ -99,13 +89,13 @@ class Categories extends Controller {
   }
 
   public function delete($id) {
-    if ($this->model('StuffsModel')->getStuffsAmountByCategoryId($id) > 0) {
-      Flasher::setFlash('Cannot delete, there are stuff with this category!');
+    if ($this->model('StuffsModel')->getStuffsAmountByCategoryId($id)) {
+      Flasher::setFlash("Can't delete, there are stuff with this category!");
       header('Location: ' . BASEURL . '/categories');
       exit;
     }
 
-    if ($this->model('CategoriesModel')->deleteCategory($id) > 0) {
+    if ($this->model('CategoriesModel')->deleteCategory($id)) {
       Flasher::setFlash('Category has been deleted!');
       header('Location: ' . BASEURL . '/categories');
       exit;

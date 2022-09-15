@@ -22,6 +22,7 @@ final class Users extends AbstractMigration
             ->addColumn('is_active', 'boolean', ['null' => false, 'default' => false])
             ->addColumn('created_at', 'text', ['null' => false])
             ->addColumn('updated_at', 'text', ['null' => false])
+            ->addColumn('last_login', 'text', ['null' => false])
             ->addColumn('is_deleted', 'boolean', ['null' => false, 'default' => false])
             ->create();
     }

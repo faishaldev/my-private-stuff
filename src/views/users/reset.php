@@ -5,12 +5,12 @@
   </ul>
 </nav>
 <form action="<?= BASEURL; ?>/users/change" method="POST">
-  <input type="email" name="email" id="email" value="<?php $data['email'] ?>">
-  <div>
-    <input type="text" name="email" id="email" placeholder="Email" required autofocus>
-  </div>
+  <input type="hidden" name="id" id="id" value="<?= $_GET['id']; ?>">
   <div>
     <input type="password" name="new_password" id="new_password" placeholder="New password" required>
+  </div>
+  <div>
+    <input type="password" name="verify_new_password" id="verify_new_password" placeholder="Retype New password" required>
   </div>
   <button type="submit">Submit</button>
 </form>
