@@ -9,15 +9,15 @@ class Controller {
     if (isset($_SESSION['username'])) {
       require_once '../src/views/' . $view . '.php';
     } else if (isset($_GET['forgot'])) {
-      require_once '../src/views/users/forgot.php';
+      require_once '../src/views/forgot/index.php';
     } else if (isset($_GET['register'])) {
-      require_once '../src/views/users/register.php';
+      require_once '../src/views/register/index.php';
     } else if (isset($_GET['login'])) {
-      require_once '../src/views/users/login.php';
+      require_once '../src/views/login/index.php';
     } else if (isset($_GET['about'])) {
       require_once '../src/views/about/index.php';
     } else if (isset($_GET['reset']) && isset($_GET['id'])) {
-      require_once '../src/views/users/reset.php';
+      require_once '../src/views/reset/index.php';
     } else {
       require_once '../src/views/home/index.php';
     }

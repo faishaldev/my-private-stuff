@@ -4,8 +4,8 @@
     <li><a href="<?= BASEURL; ?>">Home</a></li>
   </ul>
 </nav>
-<form action="<?= BASEURL; ?>/users/change" method="POST">
-  <input type="hidden" name="id" id="id" value="<?= $_GET['id']; ?>">
+<form action="<?= BASEURL; ?>/reset/password" method="POST">
+  <input type="text" name="id" id="id" value="<?= $_GET['id']; ?>">
   <div>
     <input type="password" name="new_password" id="new_password" placeholder="New password" required>
   </div>

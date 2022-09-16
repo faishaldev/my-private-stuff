@@ -4,7 +4,7 @@
     <li><a href="<?= BASEURL; ?>">Home</a></li>
   </ul>
 </nav>
-<form action="<?= BASEURL; ?>/users/signup" method="POST">
+<form action="<?= BASEURL; ?>/register/user" method="POST">
   <div>
     <input type="text" name="username" id="username" placeholder="Username" required autofocus>
   </div>

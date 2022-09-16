@@ -4,7 +4,7 @@
     <li><a href="<?= BASEURL; ?>">Home</a></li>
   </ul>
 </nav>
-<form action="<?= BASEURL; ?>/users/password" method="POST">
+<form action="<?= BASEURL; ?>/forgot/password" method="POST">
   <div>
     <input type="text" name="email" id="email" placeholder="Email" required autofocus>
   </div>
