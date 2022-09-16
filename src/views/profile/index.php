@@ -1,6 +1,6 @@
 <?php include_once __DIR__ . '/../layouts/navbar.php' ?>
 
-<h2>Your Profile Information</h2>
+<h1>Your Profile Information</h1>
 <table>
   <tr>
     <th>Username</th>
