@@ -8,7 +8,7 @@
         <li><a href="?about=true">About</a></li>
       <?php } else { ?>
         <li><a href="<?= BASEURL; ?>/dashboard">Dashboard</a></li>
-        <li><a href="<?= BASEURL; ?>/users/logout" onclick="return confirm('Are you sure?')">Logout</a></li>
+        <li><a href="<?= BASEURL; ?>/logout" onclick="return confirm('Are you sure?')">Logout</a></li>
       <?php } ?>
     </ul>
   </nav>

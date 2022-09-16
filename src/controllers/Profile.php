@@ -32,7 +32,7 @@ class Profile extends Controller {
     $data = [
       'title' => 'Edit Profile',
       'role' => $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username']),
-      'user' => $this->model('UsersModel')->getUserInfoByUsername($_SESSION['username'])
+      'user' => $this->model('UsersModel')->getUserByUsername($_SESSION['username'])
     ];
 
     $this->view('templates/header', $data);
@@ -101,5 +101,22 @@ class Profile extends Controller {
     Flasher::setFlash('Old password not match!');
     header('Location: ' . BASEURL . '/profile/change');
     exit;
+  }
+
+  public function delete($id) {
+    $role = $this->model('UsersModel')->getRoleNameByUsername($_SESSION['username']);
+
+    if ($role === 'Admin') {
+      header('Location: ' . BASEURL . '/profile');
+      exit;
+    }
+
+    if ($this->model('UsersModel')->deleteUser($id)) {
+      session_start();
+      unset($_SESSION['username']);
+      Flasher::setFlash('Your account has been deleted!');
+      header('Location: ' . BASEURL);
+      exit;
+    }
   }
 }

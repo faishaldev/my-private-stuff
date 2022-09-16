@@ -29,8 +29,16 @@ class Register extends Controller {
       exit;
     }
 
+    if ($_POST['password'] !== $_POST['verify_password']) {
+      Flasher::setFlash('Password not match!');
+      header('Location: ' . BASEURL . '/?register=true');
+      exit;
+    }
+    
+    $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
     if ($this->model('UsersModel')->addUser($_POST)) {
-      Flasher::setFlash('Account has been created! Check your email for activation!');
+      Flasher::setFlash('Account has been created! Please waiting for email activation!');
       header('Location: ' . BASEURL . '/?login=true');
       exit;
     }

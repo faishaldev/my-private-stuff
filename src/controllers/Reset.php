@@ -2,6 +2,11 @@
 
 class Reset extends Controller {
   public function index() {
+    if (isset($_SESSION['username'])) {
+      header('Location: ' . BASEURL);
+      exit;
+    }
+
     $data = [
       'title' => "Reset Password",
     ];

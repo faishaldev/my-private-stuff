@@ -5,7 +5,7 @@
   </ul>
 </nav>
 <form action="<?= BASEURL; ?>/reset/password" method="POST">
-  <input type="text" name="id" id="id" value="<?= $_GET['id']; ?>">
+  <input type="hidden" name="id" id="id" value="<?= $_GET['id']; ?>">
   <div>
     <input type="password" name="new_password" id="new_password" placeholder="New password" required>
   </div>

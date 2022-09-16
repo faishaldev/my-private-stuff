@@ -149,6 +149,9 @@ class Users extends Controller {
   }
 
   public function remove($id) {
+    $this->model('StuffsModel')->deleteStuffsByUserId($id);
+    $this->model('CategoriesModel')->deleteCategoriesByUserId($id);
+    
     if ($this->model('UsersModel')->removeUser($id)) {
       Flasher::setFlash('User account has been removed from database!');
       header('Location: ' . BASEURL . '/users');
@@ -185,7 +188,7 @@ class Users extends Controller {
 
       $mail->isHTML(true);
       $mail->Subject = "Email Activation for My Private Stuff Account";
-      $mail->Body = "Here the link for activate your account: \n" . BASEURL . "/users/activation/" . $id;
+      $mail->Body = "Here the link to activate your account: \n" . BASEURL . "/users/activation/" . $id;
 
       $mail->send();
 

@@ -27,8 +27,8 @@ class Login extends Controller {
         foreach ($login as $row) :
           if ($row['is_active']) {
             if ($row['is_deleted']) {
-              Flasher::setFlash('Account has been deleted!');
-              header('Location: ' . BASEURL);
+              Flasher::setFlash('Your Account has been deleted!');
+              header('Location: ' . BASEURL . '/?login=true');
               exit;
             }
   
@@ -43,12 +43,12 @@ class Login extends Controller {
   
           if (!$row['is_active']) {
             if ($row['is_deleted']) {
-              Flasher::setFlash('Account has been deleted!');
-              header('Location: ' . BASEURL);
+              Flasher::setFlash('Your Account has been deleted!');
+              header('Location: ' . BASEURL . '/?login=true');
               exit;
             }
             
-            Flasher::setFlash('Account not activated yet!');
+            Flasher::setFlash('Your Account not activated yet!');
             header('Location: ' . BASEURL . '/?login=true');
             exit;
           }

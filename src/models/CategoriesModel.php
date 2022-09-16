@@ -75,4 +75,12 @@ class CategoriesModel {
 
     return $this->db->rowCount();
   }
+
+  public function deleteCategoriesByUserId($userId) {
+    $this->db->query('DELETE FROM categories WHERE user_id = :user_id');
+    $this->db->bind('user_id', $userId);
+    $this->db->execute();
+
+    return $this->db->rowCount();
+  }
 }

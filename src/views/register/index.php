@@ -15,13 +15,16 @@
     <input type="email" name="email" id="email" placeholder="Email" required>
   </div>
   <div>
-    <input type="phone" name="phonenumber" id="phonenumber" placeholder="Phone number" required>
+    <input type="phone" name="phonenumber" id="phonenumber" placeholder="Phone number" maxlength="13" required>
   </div>
   <div>
     <input type="text" name="address" id="address" placeholder="Address" required>
   </div>
   <div>
     <input type="password" name="password" id="password" placeholder="Password" required>
+  </div>
+  <div>
+    <input type="password" name="verify_password" id="verify_password" placeholder="Retype Password" required>
   </div>
   <button type="submit" onclick="return confirm('Are you sure?')">Register</button>
 </form>

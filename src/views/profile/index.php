@@ -29,4 +29,9 @@
 <div>
   <a href="<?= BASEURL; ?>/profile/change">Change the password</a>
 </div>
+<?php if ($data['role'] === 'User') { ?>
+<div>
+  <a href="<?= BASEURL; ?>/profile/delete/<?= $data['user']['id']; ?>" onclick="return confirm('Are you sure?')">Delete your account</a>
+</div>
+<?php } ?>
 <?php Flasher::flash(); ?>

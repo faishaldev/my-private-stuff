@@ -44,7 +44,7 @@ class Forgot extends Controller {
 
         $mail->isHTML(true);
         $mail->Subject = "Email Reset Password for My Private Stuff Account";
-        $mail->Body = "Here the link for reset your account password: \n" . BASEURL . '/?reset=true&id=' . $userId;
+        $mail->Body = "Here the link to reset your account password: \n" . BASEURL . '/?reset=true&id=' . $userId;
 
         $mail->send();
 

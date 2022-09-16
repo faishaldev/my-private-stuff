@@ -13,8 +13,8 @@ if (!isset($_SESSION)) {
     <li><a href="<?= BASEURL; ?>/categories">Categories</a></li>
     <li><a href="<?= BASEURL; ?>/stuffs">Stuffs</a></li>
     <?= $data['role'] === 'Admin' ? '<li><a href="' . BASEURL . '/users">Users</a></li>' : ''; ?>
-    <li><a href="<?= BASEURL; ?>/about">About</a></li>
     <li><a href="<?= BASEURL; ?>/profile">Profile</a></li>
+    <li><a href="<?= BASEURL; ?>/about">About</a></li>
     <li><a href="<?= BASEURL; ?>/logout" onclick="return confirm('Are you sure?')">Logout</a></li>
   </ul>
 </nav>
