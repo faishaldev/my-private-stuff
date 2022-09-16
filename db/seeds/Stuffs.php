@@ -14,8 +14,8 @@ class Stuffs extends AbstractSeed
                 'user_id' => 'user-234',
                 'name' => 'Amazing You!',
                 'description' => 'Resep Rahasia Kehidupan Luar Biasa',
-                'created_at' => '2022',
-                'updated_at' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c')
             ),
             array(
                 'id' => 'stuff-234',
@@ -23,8 +23,8 @@ class Stuffs extends AbstractSeed
                 'user_id' => 'user-345',
                 'name' => 'Fan',
                 'description' => 'Mini Stand Cosmos Fan',
-                'created_at' => '2022',
-                'updated_at' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c')
             ),
             array(
                 'id' => 'stuff-345',
@@ -32,8 +32,8 @@ class Stuffs extends AbstractSeed
                 'user_id' => 'user-345',
                 'name' => 'Stove',
                 'description' => 'E-lux Induction Stove',
-                'created_at' => '2022',
-                'updated_at' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c')
             ),
             array(
                 'id' => 'stuff-456',
@@ -41,8 +41,8 @@ class Stuffs extends AbstractSeed
                 'user_id' => 'user-456',
                 'name' => 'Clothes',
                 'description' => 'Flanel Cloth',
-                'created_at' => '2022',
-                'updated_at' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c')
             ),
             array(
                 'id' => 'stuff-567',
@@ -50,8 +50,8 @@ class Stuffs extends AbstractSeed
                 'user_id' => 'user-456',
                 'name' => 'Pen',
                 'description' => 'Standard Pen',
-                'created_at' => '2022',
-                'updated_at' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c')
             ),
             array(
                 'id' => 'stuff-678',
@@ -59,8 +59,8 @@ class Stuffs extends AbstractSeed
                 'user_id' => 'user-456',
                 'name' => "Laptop's Bag",
                 'description' => "Lenovo Laptop's Bag",
-                'created_at' => '2022',
-                'updated_at' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c')
             )
         );
 

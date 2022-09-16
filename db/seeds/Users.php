@@ -18,9 +18,9 @@ class Users extends AbstractSeed
                 'phonenumber' => '81234567891',
                 'address' => 'Semarang',
                 'is_active' => true,
-                'created_at' => '2022',
-                'updated_at' => '2022',
-                'last_login' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c'),
+                'last_login' => date('c')
             ),
             array(
                 'id' => 'user-234',
@@ -32,9 +32,9 @@ class Users extends AbstractSeed
                 'phonenumber' => '82345678910',
                 'address' => 'Semarang',
                 'is_active' => true,
-                'created_at' => '2022',
-                'updated_at' => '2022',
-                'last_login' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c'),
+                'last_login' => date('c')
             ),
             array(
                 'id' => 'user-345',
@@ -46,9 +46,9 @@ class Users extends AbstractSeed
                 'phonenumber' => '83456789101',
                 'address' => 'Semarang',
                 'is_active' => true,
-                'created_at' => '2022',
-                'updated_at' => '2022',
-                'last_login' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c'),
+                'last_login' => date('c')
             ),
             array(
                 'id' => 'user-456',
@@ -59,9 +59,9 @@ class Users extends AbstractSeed
                 'fullname' => 'Erwin Rizqi',
                 'phonenumber' => '84567891012',
                 'address' => 'Semarang',
-                'created_at' => '2022',
-                'updated_at' => '2022',
-                'last_login' => '2022'
+                'created_at' => date('c'),
+                'updated_at' => date('c'),
+                'last_login' => date('c')
             )
         );
 
